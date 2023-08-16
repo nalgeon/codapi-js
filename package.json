@@ -1,0 +1,18 @@
+{
+    "name": "codapi",
+    "version": "0.0.1",
+    "description": "Interactive code playground.",
+    "author": "Anton Zhiyanov",
+    "license": "MIT",
+    "homepage": "https://antonz.org/codapi",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/nalgeon/codapi-js.git"
+    },
+    "files": [
+        "dist/*"
+    ],
+    "devDependencies": {
+        "esbuild": "0.19.2"
+    }
+}
