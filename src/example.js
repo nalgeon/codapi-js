@@ -12,12 +12,20 @@ const State = {
     succeded: "succeded",
 };
 
+// Editor features.
+const Editor = {
+    off: "off",
+    basic: "basic",
+    external: "external",
+};
+
 // CodapiExample initializes an interactive code example.
 class CodapiExample extends HTMLElement {
     constructor() {
         super();
 
-        this.isEditable = false;
+        this.selector = "";
+        this.editor = Editor.off;
         this.ready = false;
         this.executor = null;
 
@@ -37,13 +45,13 @@ class CodapiExample extends HTMLElement {
         }
         this.init();
         this.render();
-        this.listen();
         this.ready = true;
     }
 
     // init initializes the component state.
     init() {
-        this.isEditable = this.hasAttribute("editable");
+        this.selector = this.getAttribute("selector");
+        this.editor = this.getAttribute("editor") || Editor.off;
         this.executor = new Executor({
             lang: this.getAttribute("language"),
             template: this.getAttribute("template"),
@@ -58,21 +66,13 @@ class CodapiExample extends HTMLElement {
         this.makeEditable();
     }
 
-    // listen subscribes to UI events.
-    listen() {
-        if (!this.isEditable) {
-            return;
-        }
-        // shortcuts
-        this.ui.code.addEventListener("keydown", this.onKeydown.bind(this));
-        // always paste as plain text
-        this.ui.code.addEventListener("paste", this.onPaste.bind(this));
-    }
-
     // buildUI prepares the example UI.
     buildUI() {
-        const selector = this.getAttribute("selector") || "pre code";
-        this.ui.code = this.querySelector(selector);
+        if (this.selector) {
+            this.ui.code = document.querySelector(this.selector);
+        } else {
+            this.ui.code = this.previousElementSibling;
+        }
 
         this.ui.output = document.createElement("codapi-output");
         this.ui.output.style.display = "none";
@@ -93,12 +93,30 @@ class CodapiExample extends HTMLElement {
     // makeEditable allows editing
     // and executing the updated example.
     makeEditable() {
-        if (!this.isEditable) {
+        if (this.editor == Editor.off) {
+            // all features are disabled
             return;
         }
+
+        if (this.editor == Editor.external) {
+            // editing features are handled by an external editor,
+            // so only enable the execute shortcut
+            this.ui.code.addEventListener(
+                "keydown",
+                this.handleExecute.bind(this)
+            );
+            return;
+        }
+
+        // otherwise, enable basic editing features
         // make the element editable
         this.ui.code.contentEditable = "true";
-        this.ui.code.addEventListener("keydown", (event) => {});
+        // indent on Tab
+        this.ui.code.addEventListener("keydown", this.handleIndent.bind(this));
+        // always paste as plain text
+        this.ui.code.addEventListener("paste", this.onPaste.bind(this));
+        // execute shortcut
+        this.ui.code.addEventListener("keydown", this.handleExecute.bind(this));
 
         // add an 'edit' link
         this.ui.edit = document.createElement("a");
@@ -131,12 +149,6 @@ class CodapiExample extends HTMLElement {
         this.setAttribute("state", value);
     }
 
-    // onKeydown listens for keyboard events.
-    onKeydown(event) {
-        if (this.handleIndent(event)) return;
-        if (this.handleExecute(event)) return;
-    }
-
     // handleIndent indents text with Tab
     handleIndent(event) {
         if (event.key != "Tab") {
@@ -163,6 +175,9 @@ class CodapiExample extends HTMLElement {
 
     // onPaste converts the pasted data to plain text
     onPaste(event) {
+        if (this.editor != Editor.basic) {
+            return false;
+        }
         event.preventDefault();
         // get text representation of clipboard
         const text = (event.originalEvent || event).clipboardData.getData(
