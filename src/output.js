@@ -16,16 +16,19 @@ class CodapiOutput extends HTMLElement {
 
     // showResult shows the results of the code execution.
     showResult(result) {
-        let html = "";
+        let html = [];
         if (result.stdout) {
-            html += sanitize(result.stdout) + "\n";
+            html.push(sanitize(result.stdout));
         }
         if (result.stderr) {
-            html += sanitize(result.stderr) + "\n";
+            html.push(sanitize(result.stderr));
         }
         this.style.display = "block";
         const mark = result.ok ? "✓" : "✗";
-        this.innerHTML = `<p>${mark} Took ${result.duration} ms</p><pre><code>${html}</code></pre>`;
+        this.innerHTML = `
+            <p>${mark} Took ${result.duration} ms</p>
+            <pre><code>${html.join("\n")}</code></pre>
+        `;
     }
 
     // showMessage shows a message.
