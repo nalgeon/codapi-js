@@ -7,4 +7,4 @@ build:
 
 publish:
 	make build
-	npm publish
+	npm publish --access=public

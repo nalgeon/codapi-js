@@ -1,5 +1,5 @@
 {
-    "name": "codapi",
+    "name": "@antonz/codapi",
     "version": "0.0.1",
     "description": "Interactive code playground.",
     "author": "Anton Zhiyanov",
