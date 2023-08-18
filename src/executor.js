@@ -1,7 +1,7 @@
 // Execute code using the sandbox server API.
 
 const defaultCommand = "run";
-const defaultUrl = "https://codapi.antonz.org/v1";
+const defaultUrl = "https://api.codapi.org/v1";
 
 // An Executor runs the code and shows the results.
 class Executor {
