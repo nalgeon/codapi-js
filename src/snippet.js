@@ -34,6 +34,7 @@ class CodapiSnippet extends HTMLElement {
             toolbar: null,
             run: null,
             edit: null,
+            status: null,
             promo: null,
             output: null,
         };
@@ -84,8 +85,13 @@ class CodapiSnippet extends HTMLElement {
             this.execute(this.ui.code.innerText);
         });
 
+        this.ui.status = document.createElement("codapi-status");
+        this.ui.status.style.display = "inline-block";
+        this.ui.status.style.marginLeft = "1em";
+
         this.ui.toolbar = document.createElement("div");
         this.ui.toolbar.appendChild(this.ui.run);
+        this.ui.toolbar.appendChild(this.ui.status);
 
         this.appendChild(this.ui.toolbar);
         this.appendChild(this.ui.output);
@@ -125,24 +131,12 @@ class CodapiSnippet extends HTMLElement {
         this.ui.edit.style.cursor = "pointer";
         this.ui.edit.style.display = "inline-block";
         this.ui.edit.style.marginLeft = "1em";
-        this.ui.toolbar.appendChild(this.ui.edit);
+        this.ui.run.insertAdjacentElement("afterend", this.ui.edit);
 
         this.ui.edit.addEventListener("click", (e) => {
             this.ui.code.focus();
             return false;
         });
-    }
-
-    // showPromo shows a link to the codapi website.
-    showPromo() {
-        if (this.ui.promo) {
-            return;
-        }
-        this.ui.promo = document.createElement("span");
-        this.ui.promo.innerHTML = `powered by <a href="https://antonz.org/codapi">codapi</a>`;
-        this.ui.promo.style.display = "inline-block";
-        this.ui.promo.style.marginLeft = "1em";
-        this.ui.toolbar.appendChild(this.ui.promo);
     }
 
     // setState sets the state attribute.
@@ -199,12 +193,14 @@ class CodapiSnippet extends HTMLElement {
             this.ui.run.setAttribute("disabled", "disabled");
             this.ui.output.fadeOut();
             this.setState(State.running);
+            this.ui.status.showRunning();
             const result = await this.executor.execute(code);
             this.setState(result.ok ? State.succeded : State.failed);
+            this.ui.status.showFinished(result);
             this.ui.output.showResult(result);
-            // this.showPromo();
         } catch (exc) {
             this.setState(State.failed);
+            this.ui.status.showFinished(null);
             this.ui.output.showError(exc);
         } finally {
             this.ui.run.removeAttribute("disabled");

@@ -24,11 +24,7 @@ class CodapiOutput extends HTMLElement {
             html.push(sanitize(result.stderr));
         }
         this.style.display = "block";
-        const mark = result.ok ? "✓" : "✗";
-        this.innerHTML = `
-            <p>${mark} Took ${result.duration} ms</p>
-            <pre><code>${html.join("\n")}</code></pre>
-        `;
+        this.innerHTML = `<pre><code>${html.join("\n")}</code></pre>`;
     }
 
     // showMessage shows a message.
