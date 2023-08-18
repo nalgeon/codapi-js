@@ -1,6 +1,6 @@
-// An output of an interactive code example.
+// An output of an interactive code snippet.
 
-// CodapiOutput prints the output of an interactive code example.
+// CodapiOutput prints the output of an interactive code snippet.
 class CodapiOutput extends HTMLElement {
     // fadeOut slightly fades out the output.
     fadeOut() {

@@ -1,11 +1,13 @@
 // Execute code using the sandbox server API.
 
+const defaultCommand = "run";
 const defaultUrl = "https://codapi.antonz.org/v1";
 
 // An Executor runs the code and shows the results.
 class Executor {
-    constructor({ lang, template, url }) {
-        this.lang = lang;
+    constructor({ sandbox, command, template, url }) {
+        this.sandbox = sandbox;
+        this.command = command || defaultCommand;
         this.template = template;
         this.apiUrl = url || defaultUrl;
     }
@@ -13,11 +15,12 @@ class Executor {
     // execute runs the code and shows the results.
     async execute(code) {
         code = await this.prepare(code);
-        const result = await exec({
-            apiUrl: this.apiUrl,
-            lang: this.lang,
-            command: "run",
-            code: code,
+        const result = await exec(this.apiUrl, {
+            sandbox: this.sandbox,
+            command: this.command,
+            files: {
+                "": code,
+            },
         });
         return result;
     }
@@ -43,9 +46,8 @@ async function readFile(path) {
 
 // exec executes a specific command
 // using a sandbox server API.
-async function exec({ apiUrl, lang, command, code }) {
+async function exec(apiUrl, data) {
     const url = `${apiUrl}/exec`;
-    const data = { lang, command, code };
     const resp = await fetch(url, {
         method: "POST",
         headers: {

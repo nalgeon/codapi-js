@@ -1,10 +1,10 @@
-// An interactive code example.
+// An interactive code snippet.
 
 const TAB_WIDTH = 4;
 
 import { Executor } from "./executor.js";
 
-// Example state.
+// Snippet state.
 const State = {
     unknown: "unknown",
     running: "running",
@@ -19,8 +19,8 @@ const Editor = {
     external: "external",
 };
 
-// CodapiExample initializes an interactive code example.
-class CodapiExample extends HTMLElement {
+// CodapiSnippet initializes an interactive code snippet.
+class CodapiSnippet extends HTMLElement {
     constructor() {
         super();
 
@@ -53,20 +53,21 @@ class CodapiExample extends HTMLElement {
         this.selector = this.getAttribute("selector");
         this.editor = this.getAttribute("editor") || Editor.off;
         this.executor = new Executor({
-            lang: this.getAttribute("language"),
+            sandbox: this.getAttribute("sandbox"),
+            command: this.getAttribute("command"),
             template: this.getAttribute("template"),
             url: this.getAttribute("url"),
         });
         this.setState(State.unknown);
     }
 
-    // render prepares an interactive example.
+    // render prepares an interactive snippet.
     render() {
         this.buildUI();
         this.makeEditable();
     }
 
-    // buildUI prepares the example UI.
+    // buildUI prepares the snippet UI.
     buildUI() {
         if (this.selector) {
             this.ui.code = document.querySelector(this.selector);
@@ -91,7 +92,7 @@ class CodapiExample extends HTMLElement {
     }
 
     // makeEditable allows editing
-    // and executing the updated example.
+    // and executing the updated snippet.
     makeEditable() {
         if (this.editor == Editor.off) {
             // all features are disabled
@@ -212,4 +213,4 @@ class CodapiExample extends HTMLElement {
     }
 }
 
-export { CodapiExample };
+export { CodapiSnippet };
