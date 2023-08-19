@@ -3,7 +3,7 @@
 FLAGS = --bundle --minify --target=es2018
 
 build:
-	./node_modules/.bin/esbuild src/index.js $(FLAGS) --outfile=dist/codapi.js
+	./node_modules/.bin/esbuild src/snippet.js $(FLAGS) --outfile=dist/snippet.js
 
 publish:
 	make build

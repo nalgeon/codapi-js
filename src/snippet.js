@@ -1,7 +1,9 @@
-// An interactive code snippet.
+// Interactive code snippet web component.
 
 const TAB_WIDTH = 4;
 
+import { CodapiStatus } from "./status.js";
+import { CodapiOutput } from "./output.js";
 import { Executor } from "./executor.js";
 
 // Snippet state.
@@ -207,6 +209,13 @@ class CodapiSnippet extends HTMLElement {
             this.ui.output.fadeIn();
         }
     }
+}
+
+if (!window.customElements.get("codapi-snippet")) {
+    window.CodapiSnippet = CodapiSnippet;
+    customElements.define("codapi-snippet", CodapiSnippet);
+    customElements.define("codapi-status", CodapiStatus);
+    customElements.define("codapi-output", CodapiOutput);
 }
 
 export { CodapiSnippet };

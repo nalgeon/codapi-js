@@ -51,6 +51,7 @@ async function exec(apiUrl, data) {
     const resp = await fetch(url, {
         method: "POST",
         headers: {
+            accept: "application/json",
             "content-type": "application/json",
         },
         body: JSON.stringify(data),

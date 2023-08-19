@@ -13,7 +13,7 @@ class CodapiStatus extends HTMLElement {
     // showFinished shows succeeded/failed status.
     showFinished(result) {
         if (!result) {
-            this.ui.status.innerHTML = "✘ Failed";
+            this.innerHTML = "✘ Failed";
             return;
         }
         const mark = result.ok ? "✔" : "✘";
