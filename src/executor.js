@@ -30,7 +30,7 @@ class Executor {
         if (!this.template) {
             return Promise.resolve(code);
         }
-        const placeholder = "// {{ CODE }}";
+        const placeholder = "##CODE##";
         const template = await readFile(this.template);
         code = template.replace(placeholder, code);
         return code;
