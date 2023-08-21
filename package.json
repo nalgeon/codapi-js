@@ -4,7 +4,7 @@
     "description": "Embeddable interactive code playground for education, documentation, and fun.",
     "author": "Anton Zhiyanov",
     "license": "MIT",
-    "homepage": "https://antonz.org/codapi",
+    "homepage": "https://codapi.org",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/nalgeon/codapi-js.git"
