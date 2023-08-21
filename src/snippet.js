@@ -33,11 +33,8 @@ class CodapiSnippet extends HTMLElement {
 
         this.ui = {
             code: null,
-            toolbar: null,
             run: null,
-            edit: null,
             status: null,
-            promo: null,
             output: null,
         };
     }
@@ -72,31 +69,31 @@ class CodapiSnippet extends HTMLElement {
 
     // buildUI prepares the snippet UI.
     buildUI() {
-        if (this.selector) {
-            this.ui.code = document.querySelector(this.selector);
-        } else {
-            this.ui.code = this.previousElementSibling;
-        }
+        const code = this.selector
+            ? document.querySelector(this.selector)
+            : this.previousElementSibling;
 
-        this.ui.output = document.createElement("codapi-output");
-        this.ui.output.style.display = "none";
+        const output = document.createElement("codapi-output");
+        output.style.display = "none";
 
-        this.ui.run = document.createElement("button");
-        this.ui.run.innerHTML = "Run";
-        this.ui.run.addEventListener("click", (e) => {
-            this.execute(this.ui.code.innerText);
+        const run = document.createElement("button");
+        run.innerHTML = "Run";
+        run.addEventListener("click", (e) => {
+            this.execute(code.innerText);
         });
 
-        this.ui.status = document.createElement("codapi-status");
-        this.ui.status.style.display = "inline-block";
-        this.ui.status.style.marginLeft = "1em";
+        const status = document.createElement("codapi-status");
+        status.style.display = "inline-block";
+        status.style.marginLeft = "1em";
 
-        this.ui.toolbar = document.createElement("div");
-        this.ui.toolbar.appendChild(this.ui.run);
-        this.ui.toolbar.appendChild(this.ui.status);
+        const toolbar = document.createElement("div");
+        toolbar.appendChild(run);
+        toolbar.appendChild(status);
 
-        this.appendChild(this.ui.toolbar);
-        this.appendChild(this.ui.output);
+        this.appendChild(toolbar);
+        this.appendChild(output);
+
+        this.ui = { ...this.ui, ...{ code, run, status, output } };
     }
 
     // makeEditable allows editing
@@ -107,38 +104,37 @@ class CodapiSnippet extends HTMLElement {
             return;
         }
 
+        const code = this.ui.code;
+
         if (this.editor == Editor.external) {
             // editing features are handled by an external editor,
             // so only enable the execute shortcut
-            this.ui.code.addEventListener(
-                "keydown",
-                this.handleExecute.bind(this)
-            );
+            code.addEventListener("keydown", this.handleExecute.bind(this));
             return;
         }
 
         // otherwise, enable basic editing features
         // make the element editable
-        this.ui.code.contentEditable = "true";
+        code.contentEditable = "true";
         // indent on Tab
-        this.ui.code.addEventListener("keydown", this.handleIndent.bind(this));
+        code.addEventListener("keydown", this.handleIndent.bind(this));
         // always paste as plain text
-        this.ui.code.addEventListener("paste", this.onPaste.bind(this));
+        code.addEventListener("paste", this.onPaste.bind(this));
         // execute shortcut
-        this.ui.code.addEventListener("keydown", this.handleExecute.bind(this));
+        code.addEventListener("keydown", this.handleExecute.bind(this));
 
         // add an 'edit' link
-        this.ui.edit = document.createElement("a");
-        this.ui.edit.innerHTML = "Edit";
-        this.ui.edit.style.cursor = "pointer";
-        this.ui.edit.style.display = "inline-block";
-        this.ui.edit.style.marginLeft = "1em";
-        this.ui.run.insertAdjacentElement("afterend", this.ui.edit);
-
-        this.ui.edit.addEventListener("click", (e) => {
-            this.ui.code.focus();
+        const edit = document.createElement("a");
+        edit.innerHTML = "Edit";
+        edit.style.cursor = "pointer";
+        edit.style.display = "inline-block";
+        edit.style.marginLeft = "1em";
+        edit.addEventListener("click", (e) => {
+            code.focus();
             return false;
         });
+
+        this.ui.run.insertAdjacentElement("afterend", edit);
     }
 
     // setState sets the state attribute.
@@ -186,27 +182,28 @@ class CodapiSnippet extends HTMLElement {
 
     // execute runs the code.
     async execute(code) {
+        const { run, status, output } = this.ui;
         code = code.trim();
         if (!code) {
-            this.ui.output.showMessage("");
+            output.showMessage("");
             return;
         }
         try {
-            this.ui.run.setAttribute("disabled", "disabled");
-            this.ui.output.fadeOut();
+            run.setAttribute("disabled", "disabled");
+            output.fadeOut();
             this.setState(State.running);
-            this.ui.status.showRunning();
+            status.showRunning();
             const result = await this.executor.execute(code);
             this.setState(result.ok ? State.succeded : State.failed);
-            this.ui.status.showFinished(result);
-            this.ui.output.showResult(result);
+            status.showFinished(result);
+            output.showResult(result);
         } catch (exc) {
             this.setState(State.failed);
-            this.ui.status.showFinished(null);
-            this.ui.output.showError(exc);
+            status.showFinished(null);
+            output.showError(exc);
         } finally {
-            this.ui.run.removeAttribute("disabled");
-            this.ui.output.fadeIn();
+            run.removeAttribute("disabled");
+            output.fadeIn();
         }
     }
 }
