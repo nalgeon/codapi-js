@@ -28,6 +28,20 @@ Highlights:
 
 Learn more at [**codapi.org**](https://codapi.org/)
 
+## Installation
+
+Install with `npm`:
+
+```
+npm install @antonz/codapi
+```
+
+Or use a CDN:
+
+```html
+<script src="https://unpkg.com/@antonz/codapi/dist/snippet.js"></script>
+```
+
 ## Usage
 
 Let's start with a simple use case. Suppose you have a static code snippet in Python:
@@ -47,7 +61,7 @@ msg = "Hello, World!"
 print(msg)
 </pre>
 
-<codapi-snippet sandbox="python" editor="basic"> </codapi-snippet>
+<codapi-snippet sandbox="python" editor="basic"></codapi-snippet>
 ```
 
 Note two properties here:
@@ -77,7 +91,7 @@ And that's it! The `codapi-snippet` will automatically attach itself to the `pre
 └─────┘
 ```
 
-To disable editing, set `editor="off"` instead of `editor="basic"`. To change the language, set the appropriate `sandbox` value.
+To disable editing, set `editor="off"` instead of `editor="basic"`. To change the engine, set the appropriate `sandbox` value.
 
 ### Attaching to a specific element
 
