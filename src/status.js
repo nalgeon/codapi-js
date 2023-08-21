@@ -16,9 +16,10 @@ class CodapiStatus extends HTMLElement {
             this.innerHTML = "✘ Failed";
             return;
         }
-        const mark = result.ok ? "✔" : "✘";
-        this.innerHTML = `${mark} Took ${result.duration} ms`;
-        // `by <a href="https://antonz.org/codapi">codapi</a>`
+        const mark = result.ok ? "✓" : "✘";
+        this.innerHTML = `
+            ${mark} Took ${result.duration} ms
+            <span data-ref>• <a href="https://codapi.org/">codapi</a></span>`;
     }
 }
 
