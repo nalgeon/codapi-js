@@ -2,6 +2,14 @@
 
 const defaultCommand = "run";
 const defaultUrl = "https://api.codapi.org/v1";
+const defaultErrMessage = "Something is wrong with Codapi.";
+
+const errors = {
+    400: "Bad request. Something is wrong with the request, not sure what.",
+    403: "Forbidden. Your domain is probably not allowed on Codapi.",
+    413: "Request is too large. Try submitting less code.",
+    429: "Too many requests. Try again in a few seconds.",
+};
 
 // An Executor runs the code and shows the results.
 class Executor {
@@ -56,6 +64,15 @@ async function exec(apiUrl, data) {
         },
         body: JSON.stringify(data),
     });
+    if (!resp.ok) {
+        const msg = errors[resp.status] || defaultErrMessage;
+        return {
+            ok: false,
+            duration: 0,
+            stdout: "",
+            stderr: `${resp.status} - ${msg}`,
+        };
+    }
     return await resp.json();
 }
 
