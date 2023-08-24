@@ -12,13 +12,12 @@ class CodapiStatus extends HTMLElement {
 
     // showFinished shows succeeded/failed status.
     showFinished(result) {
-        if (!result) {
+        if (!result || !result.ok) {
             this.innerHTML = "✘ Failed";
             return;
         }
-        const mark = result.ok ? "✓" : "✘";
         this.innerHTML = `
-            ${mark} Took ${result.duration} ms
+            ✓ Took ${result.duration} ms
             <span data-ref>• <a href="https://codapi.org/">codapi</a></span>`;
     }
 }
