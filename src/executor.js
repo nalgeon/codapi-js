@@ -10,7 +10,7 @@ const defaultCommand = "run";
 // the default one is codapi.exec
 const execMap = {
     javascript: js.exec,
-    http: http.exec,
+    fetch: http.exec,
 };
 
 // An Executor runs the code and shows the results.

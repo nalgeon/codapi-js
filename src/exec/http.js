@@ -27,16 +27,18 @@ function parse(text) {
     const lines = text.split("\n");
     let lineIdx = 0;
 
-    // Pparse method and URL
-    const [method, url] = lines[0].split(" ");
+    // parse method and URL
+    const methodUrl = lines[0].split(" ").filter((s) => s);
+    const [method, url] =
+        methodUrl.length >= 2 ? methodUrl : ["GET", methodUrl[0]];
     lineIdx += 1;
 
     // parse URL parameters
-    let queryParams = "";
-    for (let i = 1; i < lines.length; i++) {
+    const urlParams = [];
+    for (let i = lineIdx; i < lines.length; i++) {
         const line = lines[i].trim();
         if (line.startsWith("?") || line.startsWith("&")) {
-            queryParams += line;
+            urlParams.push(line);
             lineIdx += 1;
         } else {
             break;
@@ -50,8 +52,8 @@ function parse(text) {
         if (line === "") {
             break;
         }
-        const [headerName, headerValue] = line.split(": ");
-        headers[headerName] = headerValue;
+        const [headerName, headerValue] = line.split(":");
+        headers[headerName.trim()] = headerValue.trim();
         lineIdx += 1;
     }
 
@@ -60,7 +62,7 @@ function parse(text) {
 
     return {
         method,
-        url: url + queryParams,
+        url: url + urlParams.join(""),
         headers,
         body,
     };

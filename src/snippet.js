@@ -185,7 +185,7 @@ class CodapiSnippet extends HTMLElement {
         const { run, status, output } = this.ui;
         code = code.trim();
         if (!code) {
-            output.showMessage("");
+            output.showMessage("(empty)");
             return;
         }
         try {
