@@ -177,6 +177,44 @@ print(msg)
 
 Now `codapi-snippet` will preprocess the code using the template before sending it to the server.
 
+## Browser-only playgrounds
+
+There are two playgrounds that work completely in the browser, no Codapi server required. You can use them right away, no need to join the beta program.
+
+### JavaScript
+
+Executes the code using the [AsyncFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction).
+
+```html
+<pre>
+const msg = "Hello, World!"
+console.log(msg)
+</pre>
+
+<codapi-snippet sandbox="javascript" editor="basic"></codapi-snippet>
+```
+
+[Try it](https://codapi.org/javascript/)
+
+### Fetch
+
+Executes the code using the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
+
+```html
+<pre>
+POST https://httpbingo.org/dump/request
+content-type: application/json
+
+{
+    "message": "hello"
+}
+</pre>
+
+<codapi-snippet sandbox="fetch" editor="basic"></codapi-snippet>
+```
+
+[Try it](https://codapi.org/fetch/)
+
 ## License
 
 Copyright 2023+ [Anton Zhiyanov](https://antonz.org/).
