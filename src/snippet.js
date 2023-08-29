@@ -189,19 +189,29 @@ class CodapiSnippet extends HTMLElement {
             return;
         }
         try {
+            // prepare to execute
+            this.dispatchEvent(new CustomEvent("execute", { detail: code }));
             run.setAttribute("disabled", "disabled");
             output.fadeOut();
             this.setState(State.running);
             status.showRunning();
+
+            // execute code
             const result = await this.executor.execute(code);
+
+            // show results
             this.setState(result.ok ? State.succeded : State.failed);
             status.showFinished(result);
             output.showResult(result);
+            this.dispatchEvent(new CustomEvent("result", { detail: result }));
         } catch (exc) {
+            // show error
             this.setState(State.failed);
             status.showFinished(null);
             output.showError(exc);
+            this.dispatchEvent(new CustomEvent("error", { detail: exc }));
         } finally {
+            // clean up ui
             run.removeAttribute("disabled");
             output.fadeIn();
         }
