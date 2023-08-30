@@ -52,11 +52,13 @@ class CodapiSnippet extends HTMLElement {
     init() {
         this.selector = this.getAttribute("selector");
         this.editor = this.getAttribute("editor") || Editor.off;
+        const filesStr = this.getAttribute("files");
         this.executor = new Executor({
             sandbox: this.getAttribute("sandbox"),
             command: this.getAttribute("command"),
-            template: this.getAttribute("template"),
             url: this.getAttribute("url"),
+            template: this.getAttribute("template"),
+            files: filesStr ? filesStr.split(" ") : null,
         });
         this.setState(State.unknown);
     }

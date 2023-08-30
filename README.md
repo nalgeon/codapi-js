@@ -166,16 +166,79 @@ func main() {
 ```html
 <pre>
 msg = "Hello, World!"
-print(msg)
+fmt.Println(msg)
 </pre>
 
-<codapi-snippet sandbox="python" editor="basic" template="main.go">
+<codapi-snippet sandbox="go" editor="basic" template="main.go">
 </codapi-snippet>
 ```
 
 3. Host the `main.go` next to the web page containing the `codapi-snippet`.
 
 Now `codapi-snippet` will preprocess the code using the template before sending it to the server.
+
+Alternatively, you can use an in-page `script` tag with a code template and pass its `id` as a `template`:
+
+```html
+<script id="main.py" type="text/plain">
+def main():
+    ##CODE##
+</script>
+
+<pre>
+print("Hello, World!")
+</pre>
+
+<codapi-snippet sandbox="python" template="#main.py"></codapi-snippet>
+```
+
+The leading `#` in `template` and `type="text/plain"` in `script` are required.
+
+### Files
+
+For larger programs, you can pass multiple files along with the main one. Suppose you have a Python program with an `npc` module that you want to call from the main module. In this case, do the following:
+
+1. Prepare a file `npc.py`:
+
+```python
+def greet(name):
+    print(f"Hello, {name}")
+```
+
+2. Create a snippet with the actual code:
+
+```html
+<pre>
+npc.greet("Alice")
+</pre>
+
+<codapi-snippet sandbox="python" files="npc.py"></codapi-snippet>
+```
+
+3. Host the `npc.py` next to the web page containing the `codapi-snippet`.
+
+Now `codapi-snippet` will send `npc.py` to the server along with the main file.
+
+To pass mutiple files, separate them with space:
+
+```html
+<codapi-snippet sandbox="python" files="file1.py file2.py"></codapi-snippet>
+```
+
+You can also define files using in-page `script`s:
+
+```html
+<script id="npc.py" type="text/plain">
+def greet(name):
+    print(f"Hello, {name}")
+</script>
+
+<pre>
+npc.greet("Alice")
+</pre>
+
+<codapi-snippet sandbox="python" files="#npc.py"></codapi-snippet>
+```
 
 ## Browser-only playgrounds
 
