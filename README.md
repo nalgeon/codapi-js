@@ -72,7 +72,7 @@ Note two properties here:
 Finally, include a JavaScript file at the bottom of the page:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.3.1/dist/snippet.js"></script>
 ```
 
 (CDNs like unpkg can sometimes be slow, so it's even better to host `snippet.js` yourself)
