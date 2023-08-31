@@ -71,10 +71,7 @@ class CodapiSnippet extends HTMLElement {
 
     // buildUI prepares the snippet UI.
     buildUI() {
-        const code = this.selector
-            ? document.querySelector(this.selector)
-            : this.previousElementSibling;
-
+        const code = this.findCodeElement();
         const output = document.createElement("codapi-output");
         output.style.display = "none";
 
@@ -124,6 +121,9 @@ class CodapiSnippet extends HTMLElement {
         code.addEventListener("paste", this.onPaste.bind(this));
         // execute shortcut
         code.addEventListener("keydown", this.handleExecute.bind(this));
+        // init editor on first focus
+        this.onFocus = this.initEditor.bind(this);
+        code.addEventListener("focus", this.onFocus);
 
         // add an 'edit' link
         const edit = document.createElement("a");
@@ -132,11 +132,31 @@ class CodapiSnippet extends HTMLElement {
         edit.style.display = "inline-block";
         edit.style.marginLeft = "1em";
         edit.addEventListener("click", (e) => {
-            code.focus();
-            return false;
+            focusEnd(code);
         });
 
         this.ui.run.insertAdjacentElement("afterend", edit);
+    }
+
+    // findCodeElement returns the element containing the code snippet.
+    findCodeElement() {
+        if (this.selector) {
+            return document.querySelector(this.selector);
+        }
+        const prev = this.previousElementSibling;
+        return prev.querySelector("code") || prev;
+    }
+
+    // initEditor removes prepares the code snippet
+    // for editing for the first time.
+    initEditor(event) {
+        const code = event.target;
+        if (code.innerHTML.includes("</span>")) {
+            // remove syntax highlighting
+            code.innerHTML = code.innerText.replace(/\n\n/g, "\n");
+        }
+        code.removeEventListener("focus", this.onFocus);
+        delete this.onFocus;
     }
 
     // setState sets the state attribute.
@@ -218,6 +238,14 @@ class CodapiSnippet extends HTMLElement {
             output.fadeIn();
         }
     }
+}
+
+// focusEnd sets the cursor to the end of the element's content.
+function focusEnd(el) {
+    el.focus();
+    const selection = window.getSelection();
+    selection.selectAllChildren(el);
+    selection.collapseToEnd();
 }
 
 if (!window.customElements.get("codapi-snippet")) {
