@@ -2,7 +2,8 @@
 
 const defaultUrl = "https://api.codapi.org/v1";
 const defaultErrMsg = "Something is wrong with Codapi.";
-const networkErrMsg = "Either Codapi is down or there is a network problem.";
+const networkErrMsg = `Either the origin (${document.location.origin}) doesn't have access, Codapi is down or there is a network problem.`;
+
 
 const errors = {
     400: "Bad request. Something is wrong with the request, not sure what.",
