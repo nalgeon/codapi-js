@@ -82,8 +82,6 @@ class CodapiSnippet extends HTMLElement {
         });
 
         const status = document.createElement("codapi-status");
-        status.style.display = "inline-block";
-        status.style.marginLeft = "1em";
 
         const toolbar = document.createElement("div");
         toolbar.appendChild(run);
@@ -127,10 +125,8 @@ class CodapiSnippet extends HTMLElement {
 
         // add an 'edit' link
         const edit = document.createElement("a");
+        edit.href = "#edit";
         edit.innerHTML = "Edit";
-        edit.style.cursor = "pointer";
-        edit.style.display = "inline-block";
-        edit.style.marginLeft = "1em";
         edit.addEventListener("click", (e) => {
             focusEnd(code);
         });

@@ -39,7 +39,7 @@ npm install @antonz/codapi
 Or use a CDN:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.3.2/dist/snippet.js"></script>
 ```
 
 ## Usage
@@ -69,13 +69,22 @@ Note two properties here:
 -   `sandbox` defines the engine that will execute the code. Usually it's the name of the language or software, like `python`, `bash` or `sqlite`.
 -   `editor="basic"` enables code snippet editing.
 
-Finally, include a JavaScript file at the bottom of the page:
+Finally, include the default styles in the `head`:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi@0.3.1/dist/snippet.js"></script>
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/@antonz/codapi@0.3.2/dist/snippet.css"
+/>
 ```
 
-(CDNs like unpkg can sometimes be slow, so it's even better to host `snippet.js` yourself)
+And the JavaScript file at the bottom of the page:
+
+```html
+<script src="https://unpkg.com/@antonz/codapi@0.3.2/dist/snippet.js"></script>
+```
+
+(CDNs like unpkg can sometimes be slow, so it's even better to host both files yourself)
 
 And that's it! The `codapi-snippet` will automatically attach itself to the `pre`, allowing you to run and edit the code:
 
@@ -209,6 +218,7 @@ def greet(name):
 
 ```html
 <pre>
+import npc
 npc.greet("Alice")
 </pre>
 
@@ -234,6 +244,7 @@ def greet(name):
 </script>
 
 <pre>
+import npc
 npc.greet("Alice")
 </pre>
 

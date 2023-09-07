@@ -1,0 +1,14 @@
+codapi-snippet {
+    display: block;
+}
+
+codapi-snippet > div {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+
+codapi-output {
+    display: block;
+}
