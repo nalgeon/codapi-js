@@ -1,4 +1,5 @@
 // An output of an interactive code snippet.
+import { sanitize } from "./text.js";
 
 // CodapiOutput prints the output of an interactive code snippet.
 class CodapiOutput extends HTMLElement {
@@ -39,13 +40,6 @@ class CodapiOutput extends HTMLElement {
         this.style.display = "block";
         this.innerHTML = `<pre><code>${msg}</code></pre>`;
     }
-}
-
-// sanitize strips HTML from the text.
-function sanitize(text) {
-    const div = document.createElement("div");
-    div.innerText = text;
-    return div.innerHTML;
 }
 
 export { CodapiOutput };

@@ -4,9 +4,14 @@ codapi-snippet {
 
 codapi-snippet > div {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 1em;
     margin-bottom: 1em;
+}
+
+codapi-status {
+    white-space: nowrap;
 }
 
 codapi-output {

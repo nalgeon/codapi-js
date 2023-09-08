@@ -5,6 +5,7 @@ const TAB_WIDTH = 4;
 import { CodapiStatus } from "./status.js";
 import { CodapiOutput } from "./output.js";
 import { Executor } from "./executor.js";
+import { sanitize } from "./text.js";
 
 // Snippet state.
 const State = {
@@ -33,6 +34,7 @@ class CodapiSnippet extends HTMLElement {
 
         this.ui = {
             code: null,
+            toolbar: null,
             run: null,
             status: null,
             output: null,
@@ -65,36 +67,50 @@ class CodapiSnippet extends HTMLElement {
 
     // render prepares an interactive snippet.
     render() {
-        this.buildUI();
+        this.attachToCode();
+        this.addToolbar();
+        this.addStatus();
+        this.addOutput();
         this.makeEditable();
     }
 
-    // buildUI prepares the snippet UI.
-    buildUI() {
+    // attachToCode finds the element with code and attaches to it.
+    attachToCode() {
         const code = this.findCodeElement();
-        const output = document.createElement("codapi-output");
-        output.style.display = "none";
+        this.ui.code = code;
+    }
 
+    // addToolbar creates the toolbar element with the Run button.
+    addToolbar() {
         const run = document.createElement("button");
         run.innerHTML = "Run";
         run.addEventListener("click", (e) => {
-            this.execute(code.innerText);
+            this.execute();
         });
-
-        const status = document.createElement("codapi-status");
 
         const toolbar = document.createElement("div");
         toolbar.appendChild(run);
-        toolbar.appendChild(status);
-
         this.appendChild(toolbar);
-        this.appendChild(output);
-
-        this.ui = { ...this.ui, ...{ code, run, status, output } };
+        this.ui.run = run;
+        this.ui.toolbar = toolbar;
     }
 
-    // makeEditable allows editing
-    // and executing the updated snippet.
+    // addStatus creates the status message element.
+    addStatus() {
+        const status = document.createElement("codapi-status");
+        this.ui.toolbar.appendChild(status);
+        this.ui.status = status;
+    }
+
+    // addOutput creates the code output element.
+    addOutput() {
+        const output = document.createElement("codapi-output");
+        output.style.display = "none";
+        this.appendChild(output);
+        this.ui.output = output;
+    }
+
+    // makeEditable allows editing and executing the updated code.
     makeEditable() {
         if (this.editor == Editor.off) {
             // all features are disabled
@@ -180,7 +196,7 @@ class CodapiSnippet extends HTMLElement {
         if (event.keyCode != 10 && event.keyCode != 13) {
             return false;
         }
-        this.execute(this.ui.code.innerText);
+        this.execute();
         return true;
     }
 
@@ -199,9 +215,9 @@ class CodapiSnippet extends HTMLElement {
     }
 
     // execute runs the code.
-    async execute(code) {
+    async execute(command = undefined) {
         const { run, status, output } = this.ui;
-        code = code.trim();
+        const code = this.code;
         if (!code) {
             output.showMessage("(empty)");
             return;
@@ -215,7 +231,7 @@ class CodapiSnippet extends HTMLElement {
             status.showRunning();
 
             // execute code
-            const result = await this.executor.execute(code);
+            const result = await this.executor.execute(command, code);
 
             // show results
             this.setState(result.ok ? State.succeded : State.failed);
@@ -233,6 +249,14 @@ class CodapiSnippet extends HTMLElement {
             run.removeAttribute("disabled");
             output.fadeIn();
         }
+    }
+
+    get code() {
+        return this.ui.code.innerText.trim();
+    }
+
+    set code(value) {
+        this.ui.code.innerHTML = sanitize(value);
     }
 }
 

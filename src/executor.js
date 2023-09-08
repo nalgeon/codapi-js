@@ -25,12 +25,12 @@ class Executor {
     }
 
     // execute runs the code and shows the results.
-    async execute(code) {
+    async execute(command, code) {
         code = await this.prepare(code);
         const files = await this.loadFiles();
         const result = await this.execFunc(this.url, {
             sandbox: this.sandbox,
-            command: this.command,
+            command: command || this.command,
             files: {
                 "": code,
                 ...files,
