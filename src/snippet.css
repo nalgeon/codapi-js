@@ -1,19 +1,26 @@
 codapi-snippet {
+    --toolbar-gap: 1em;
+    --toolbar-margin-bottom: 1em;
+
     display: block;
 }
 
-codapi-snippet > div {
+codapi-toolbar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 1em;
-    margin-bottom: 1em;
+    gap: var(--toolbar-gap);
+    margin-bottom: var(--toolbar-margin-bottom);
 }
 
 codapi-status {
+    display: block;
     white-space: nowrap;
 }
 
 codapi-output {
     display: block;
+}
+codapi-output[hidden] {
+    display: none;
 }

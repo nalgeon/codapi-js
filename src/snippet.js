@@ -2,6 +2,7 @@
 
 const TAB_WIDTH = 4;
 
+import { CodapiToolbar } from "./toolbar.js";
 import { CodapiStatus } from "./status.js";
 import { CodapiOutput } from "./output.js";
 import { Executor } from "./executor.js";
@@ -22,23 +23,27 @@ const Editor = {
     external: "external",
 };
 
-// CodapiSnippet initializes an interactive code snippet.
+const template = document.createElement("template");
+template.innerHTML = `
+<codapi-toolbar></codapi-toolbar>
+<codapi-output hidden></codapi-output>
+`;
+
+// CodapiSnippet is an interactive code snippet with associated commands.
 class CodapiSnippet extends HTMLElement {
     constructor() {
         super();
 
-        this.selector = "";
-        this.editor = Editor.off;
+        // state
         this.ready = false;
         this.executor = null;
 
-        this.ui = {
-            code: null,
-            toolbar: null,
-            run: null,
-            status: null,
-            output: null,
-        };
+        // ui
+        this.snippet = null;
+        this.toolbar = null;
+        this.output = null;
+
+        this.appendChild(template.content.cloneNode(true));
     }
 
     connectedCallback() {
@@ -47,13 +52,12 @@ class CodapiSnippet extends HTMLElement {
         }
         this.init();
         this.render();
+        this.listen();
         this.ready = true;
     }
 
     // init initializes the component state.
     init() {
-        this.selector = this.getAttribute("selector");
-        this.editor = this.getAttribute("editor") || Editor.off;
         const filesStr = this.getAttribute("files");
         this.executor = new Executor({
             sandbox: this.getAttribute("sandbox"),
@@ -62,92 +66,34 @@ class CodapiSnippet extends HTMLElement {
             template: this.getAttribute("template"),
             files: filesStr ? filesStr.split(" ") : null,
         });
-        this.setState(State.unknown);
+        this.state = State.unknown;
     }
 
     // render prepares an interactive snippet.
     render() {
-        this.attachToCode();
-        this.addToolbar();
-        this.addStatus();
-        this.addOutput();
-        this.makeEditable();
+        const codeEl = this.findCodeElement();
+        this.snippet = new CodeSnippet(
+            codeEl,
+            this.editor,
+            this.execute.bind(this)
+        );
+        this.toolbar = this.querySelector("codapi-toolbar");
+        this.output = this.querySelector("codapi-output");
     }
 
-    // attachToCode finds the element with code and attaches to it.
-    attachToCode() {
-        const code = this.findCodeElement();
-        this.ui.code = code;
-    }
-
-    // addToolbar creates the toolbar element with the Run button.
-    addToolbar() {
-        const run = document.createElement("button");
-        run.innerHTML = "Run";
-        run.addEventListener("click", (e) => {
+    // listen allows running and editing the code.
+    listen() {
+        this.toolbar.addEventListener("run", (e) => {
             this.execute();
         });
 
-        const toolbar = document.createElement("div");
-        toolbar.appendChild(run);
-        this.appendChild(toolbar);
-        this.ui.run = run;
-        this.ui.toolbar = toolbar;
-    }
-
-    // addStatus creates the status message element.
-    addStatus() {
-        const status = document.createElement("codapi-status");
-        this.ui.toolbar.appendChild(status);
-        this.ui.status = status;
-    }
-
-    // addOutput creates the code output element.
-    addOutput() {
-        const output = document.createElement("codapi-output");
-        output.style.display = "none";
-        this.appendChild(output);
-        this.ui.output = output;
-    }
-
-    // makeEditable allows editing and executing the updated code.
-    makeEditable() {
-        if (this.editor == Editor.off) {
-            // all features are disabled
-            return;
+        if (this.editor == Editor.basic) {
+            // show the 'edit' link
+            this.toolbar.editable = true;
+            this.toolbar.addEventListener("edit", (e) => {
+                this.snippet.focusEnd();
+            });
         }
-
-        const code = this.ui.code;
-
-        if (this.editor == Editor.external) {
-            // editing features are handled by an external editor,
-            // so only enable the execute shortcut
-            code.addEventListener("keydown", this.handleExecute.bind(this));
-            return;
-        }
-
-        // otherwise, enable basic editing features
-        // make the element editable
-        code.contentEditable = "true";
-        // indent on Tab
-        code.addEventListener("keydown", this.handleIndent.bind(this));
-        // always paste as plain text
-        code.addEventListener("paste", this.onPaste.bind(this));
-        // execute shortcut
-        code.addEventListener("keydown", this.handleExecute.bind(this));
-        // init editor on first focus
-        this.onFocus = this.initEditor.bind(this);
-        code.addEventListener("focus", this.onFocus);
-
-        // add an 'edit' link
-        const edit = document.createElement("a");
-        edit.href = "#edit";
-        edit.innerHTML = "Edit";
-        edit.addEventListener("click", (e) => {
-            focusEnd(code);
-        });
-
-        this.ui.run.insertAdjacentElement("afterend", edit);
     }
 
     // findCodeElement returns the element containing the code snippet.
@@ -157,6 +103,106 @@ class CodapiSnippet extends HTMLElement {
         }
         const prev = this.previousElementSibling;
         return prev.querySelector("code") || prev;
+    }
+
+    // execute runs the code.
+    async execute(command = undefined) {
+        if (!this.code) {
+            this.output.showMessage("(empty)");
+            return;
+        }
+
+        try {
+            // prepare to execute
+            this.dispatchEvent(
+                new CustomEvent("execute", { detail: this.code })
+            );
+            this.state = State.running;
+            this.toolbar.showRunning();
+            this.output.fadeOut();
+
+            // execute code
+            const result = await this.executor.execute(command, this.code);
+
+            // show results
+            this.state = result.ok ? State.succeded : State.failed;
+            this.toolbar.showFinished(result);
+            this.output.showResult(result);
+            this.dispatchEvent(new CustomEvent("result", { detail: result }));
+        } catch (exc) {
+            // show error
+            this.state = State.failed;
+            this.toolbar.showFinished(null);
+            this.output.showError(exc);
+            this.dispatchEvent(new CustomEvent("error", { detail: exc }));
+        } finally {
+            this.output.fadeIn();
+        }
+    }
+
+    // selector is the code element css selector.
+    get selector() {
+        return this.getAttribute("selector");
+    }
+
+    // editor is the editor mode.
+    get editor() {
+        return this.getAttribute("editor") || Editor.off;
+    }
+
+    // code is the plain text code value.
+    get code() {
+        return this.snippet.value;
+    }
+    set code(value) {
+        this.snippet.value = value;
+    }
+
+    // state is the current snippet state.
+    get state() {
+        return this.getAttribute("state");
+    }
+    set state(value) {
+        this.setAttribute("state", value);
+    }
+}
+
+// CodeSnippet is a wrapper for the code viewer/editor element.
+class CodeSnippet {
+    constructor(el, mode, executeFunc) {
+        this.el = el;
+        this.mode = mode;
+        this.executeFunc = executeFunc;
+        this.listen();
+    }
+
+    // listen handles editing-related events
+    // if the editing is enabled.
+    listen() {
+        if (this.mode == Editor.off) {
+            // all editing features are disabled
+            return;
+        }
+
+        if (this.mode == Editor.external) {
+            // editing features are handled by an external editor,
+            // so only enable the execute shortcut
+            this.el.addEventListener("keydown", this.handleExecute.bind(this));
+            return;
+        }
+
+        // otherwise, enable basic editing features
+        // make the element editable
+        this.el.contentEditable = "true";
+        // indent on Tab
+        this.el.addEventListener("keydown", this.handleIndent.bind(this));
+        // always paste as plain text
+        this.el.addEventListener("paste", this.onPaste.bind(this));
+        // execute shortcut
+        this.el.addEventListener("keydown", this.handleExecute.bind(this));
+        // init editor on first focus
+        this.onFocus = this.initEditor.bind(this);
+        this.el.addEventListener("focus", this.onFocus);
     }
 
     // initEditor removes prepares the code snippet
@@ -169,11 +215,6 @@ class CodapiSnippet extends HTMLElement {
         }
         code.removeEventListener("focus", this.onFocus);
         delete this.onFocus;
-    }
-
-    // setState sets the state attribute.
-    setState(value) {
-        this.setAttribute("state", value);
     }
 
     // handleIndent indents text with Tab
@@ -196,15 +237,12 @@ class CodapiSnippet extends HTMLElement {
         if (event.keyCode != 10 && event.keyCode != 13) {
             return false;
         }
-        this.execute();
+        this.executeFunc();
         return true;
     }
 
     // onPaste converts the pasted data to plain text
     onPaste(event) {
-        if (this.editor != Editor.basic) {
-            return false;
-        }
         event.preventDefault();
         // get text representation of clipboard
         const text = (event.originalEvent || event).clipboardData.getData(
@@ -214,65 +252,29 @@ class CodapiSnippet extends HTMLElement {
         document.execCommand("insertHTML", false, text);
     }
 
-    // execute runs the code.
-    async execute(command = undefined) {
-        const { run, status, output } = this.ui;
-        const code = this.code;
-        if (!code) {
-            output.showMessage("(empty)");
-            return;
-        }
-        try {
-            // prepare to execute
-            this.dispatchEvent(new CustomEvent("execute", { detail: code }));
-            run.setAttribute("disabled", "disabled");
-            output.fadeOut();
-            this.setState(State.running);
-            status.showRunning();
-
-            // execute code
-            const result = await this.executor.execute(command, code);
-
-            // show results
-            this.setState(result.ok ? State.succeded : State.failed);
-            status.showFinished(result);
-            output.showResult(result);
-            this.dispatchEvent(new CustomEvent("result", { detail: result }));
-        } catch (exc) {
-            // show error
-            this.setState(State.failed);
-            status.showFinished(null);
-            output.showError(exc);
-            this.dispatchEvent(new CustomEvent("error", { detail: exc }));
-        } finally {
-            // clean up ui
-            run.removeAttribute("disabled");
-            output.fadeIn();
-        }
+    // focusEnd sets the cursor to the end of the element's content.
+    focusEnd() {
+        this.el.focus();
+        const selection = window.getSelection();
+        selection.selectAllChildren(this.el);
+        selection.collapseToEnd();
     }
 
-    get code() {
-        return this.ui.code.innerText.trim();
+    // value is the plain text code value.
+    get value() {
+        return this.el.innerText.trim();
     }
-
-    set code(value) {
-        this.ui.code.innerHTML = sanitize(value);
+    set value(val) {
+        this.el.innerHTML = sanitize(val);
     }
-}
-
-// focusEnd sets the cursor to the end of the element's content.
-function focusEnd(el) {
-    el.focus();
-    const selection = window.getSelection();
-    selection.selectAllChildren(el);
-    selection.collapseToEnd();
 }
 
 if (!window.customElements.get("codapi-snippet")) {
     window.CodapiSnippet = CodapiSnippet;
-    customElements.define("codapi-snippet", CodapiSnippet);
+    customElements.define("codapi-toolbar", CodapiToolbar);
     customElements.define("codapi-status", CodapiStatus);
     customElements.define("codapi-output", CodapiOutput);
+    customElements.define("codapi-snippet", CodapiSnippet);
 }
 
 export { CodapiSnippet };

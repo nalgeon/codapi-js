@@ -24,20 +24,20 @@ class CodapiOutput extends HTMLElement {
         if (result.stderr) {
             html.push(sanitize(result.stderr));
         }
-        this.style.display = "block";
+        this.removeAttribute("hidden");
         this.innerHTML = `<pre><code>${html.join("\n")}</code></pre>`;
     }
 
     // showMessage shows a message.
     showMessage(msg) {
-        this.style.display = "block";
+        this.removeAttribute("hidden");
         this.innerHTML = `<pre><code>${msg}</code></pre>`;
     }
 
     // showError shows an error.
     showError(exc) {
         const msg = exc.message + (exc.stack ? `\n${exc.stack}` : "");
-        this.style.display = "block";
+        this.removeAttribute("hidden");
         this.innerHTML = `<pre><code>${msg}</code></pre>`;
     }
 }
