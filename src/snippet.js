@@ -78,15 +78,27 @@ class CodapiSnippet extends HTMLElement {
             this.execute.bind(this)
         );
         this.toolbar = this.querySelector("codapi-toolbar");
+        const actions = this.getAttribute("actions");
+        this.toolbar.addActions(actions ? actions.split(" ") : null);
         this.output = this.querySelector("codapi-output");
     }
 
     // listen allows running and editing the code.
     listen() {
+        // run button
         this.toolbar.addEventListener("run", (e) => {
             this.execute();
         });
 
+        // custom toolbar buttons
+        this.toolbar.addEventListener("command", (e) => {
+            this.execute(e.detail);
+        });
+        this.toolbar.addEventListener("event", (e) => {
+            this.dispatchEvent(new Event(e.detail));
+        });
+
+        // editing
         if (this.editor == Editor.basic) {
             // show the 'edit' link
             this.toolbar.editable = true;
@@ -138,6 +150,11 @@ class CodapiSnippet extends HTMLElement {
         } finally {
             this.output.fadeIn();
         }
+    }
+
+    // showStatus shows a custom message in the status bar.
+    showStatus(message) {
+        this.toolbar.showStatus(message);
     }
 
     // selector is the code element css selector.

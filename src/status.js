@@ -1,4 +1,5 @@
 // An execution status message.
+import { sanitize } from "./text.js";
 
 // CodapiStatus shows the execution status.
 class CodapiStatus extends HTMLElement {
@@ -19,6 +20,11 @@ class CodapiStatus extends HTMLElement {
         this.innerHTML = `
             ✓ Took ${result.duration} ms
             <span data-ref>• <a href="https://codapi.org/">codapi</a></span>`;
+    }
+
+    // showMessage shows a custom message.
+    showMessage(message) {
+        this.innerHTML = sanitize(message);
     }
 }
 

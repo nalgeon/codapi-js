@@ -1,5 +1,7 @@
 // Code actions toolbar web component.
 
+import { Action } from "./action.js";
+
 const template = document.createElement("template");
 template.innerHTML = `
 <button>Run</button>
@@ -34,8 +36,38 @@ class CodapiToolbar extends HTMLElement {
             this.dispatchEvent(new Event("run"));
         });
         this.edit.addEventListener("click", (e) => {
+            e.preventDefault();
             this.dispatchEvent(new Event("edit"));
         });
+    }
+
+    addActions(specs) {
+        if (!specs) {
+            return;
+        }
+
+        for (let spec of specs) {
+            const action = Action.parse(spec);
+            if (!action) {
+                continue;
+            }
+            const btn = this.createButton(action);
+            this.insertBefore(btn, this.status);
+        }
+    }
+
+    createButton(action) {
+        const btn = document.createElement("a");
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const event = new CustomEvent(action.type, {
+                detail: action.value,
+            });
+            this.dispatchEvent(event);
+        });
+        btn.innerHTML = action.title;
+        btn.href = "#" + action.value;
+        return btn;
     }
 
     showRunning() {
@@ -46,6 +78,10 @@ class CodapiToolbar extends HTMLElement {
     showFinished(result) {
         this.run.removeAttribute("disabled");
         this.status.showFinished(result);
+    }
+
+    showStatus(message) {
+        this.status.showMessage(message);
     }
 
     get editable() {
