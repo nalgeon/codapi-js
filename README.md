@@ -28,6 +28,12 @@ Highlights:
 
 Learn more at [**codapi.org**](https://codapi.org/)
 
+[Installation](#installation) •
+[Usage](#usage) •
+[Browser playgrounds](#browser-only-playgrounds) •
+[Styling](#styling) •
+[Stay tuned](#stay-tuned)
+
 ## Installation
 
 Install with `npm`:
@@ -39,7 +45,7 @@ npm install @antonz/codapi
 Or use a CDN:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi@0.3.2/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.4.0/dist/snippet.js"></script>
 ```
 
 ## Usage
@@ -74,14 +80,14 @@ Finally, include the default styles in the `head`:
 ```html
 <link
     rel="stylesheet"
-    href="https://unpkg.com/@antonz/codapi@0.3.2/dist/snippet.css"
+    href="https://unpkg.com/@antonz/codapi@0.4.0/dist/snippet.css"
 />
 ```
 
 And the JavaScript file at the bottom of the page:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi@0.3.2/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.4.0/dist/snippet.js"></script>
 ```
 
 (CDNs like unpkg can sometimes be slow, so it's even better to host both files yourself)
@@ -162,11 +168,11 @@ And suppose you don't want to distract the reader with `package` and `import`. I
 package main
 
 import (
-	"fmt"
+    "fmt"
 )
 
 func main() {
-	##CODE##
+    ##CODE##
 }
 ```
 
@@ -251,9 +257,60 @@ npc.greet("Alice")
 <codapi-snippet sandbox="python" files="#npc.py"></codapi-snippet>
 ```
 
+### Custom actions
+
+You can add buttons to the toolbar:
+
+```html
+<codapi-snippet sandbox="python" actions="Test:test Benchmark:bench">
+</codapi-snippet>
+```
+
+Here we add two buttons:
+
+-   "Test" executes the `test` command in the `python` sandbox.
+-   "Benchmark" executes the `bench` command in the `python` sandbox.
+
+```
+┌───────────────────────────────┐
+│ msg = "Hello, World!"         │
+│ print(msg)                    │
+│                               │
+│                               │
+└───────────────────────────────┘
+┌─────┐
+│ Run │  Test  Benchmark
+└─────┘
+```
+
+To make a button trigger an event instead of executing a command, add `@` before the action name:
+
+```html
+<codapi-snippet sandbox="python" actions="Share:@share"> </codapi-snippet>
+```
+
+Here we add a "Share" button, which, when clicked, triggers the `share` event on the `codapi-snippet` element. We can then listen to this event and do something with the code:
+
+```js
+const snip = document.querySelector("codapi-snippet");
+snip.addEventListener("share", (e) => {
+    const code = e.target.code;
+    // do something with the code
+});
+```
+
+If you want the button title to contain spaces, replace them with underscores:
+
+```html
+<codapi-snippet sandbox="python" actions="Run_Tests:test Share_Code:@share">
+</codapi-snippet>
+```
+
 ## Browser-only playgrounds
 
-There are two playgrounds that work completely in the browser, no Codapi server required. You can use them right away, no need to join the beta program.
+Most playgrounds (like Python, PostgreSQL, or Bash) run code on the Codapi server.
+
+But there are two playgrounds that work completely in the browser, no Codapi server required. You can use them right away, no need to join the beta program.
 
 ### JavaScript
 
@@ -288,6 +345,27 @@ content-type: application/json
 ```
 
 [Try it](https://codapi.org/fetch/)
+
+## Styling
+
+The widget is unstyled by default. Use `snippet.css` for some basic styling or add your own instead.
+
+Here is the widget structure:
+
+```html
+<codapi-snippet sandbox="python" editor="basic">
+    <codapi-toolbar>
+        <button>Run</button>
+        <a href="#edit">Edit</a>
+        <codapi-status> ✓ Took 1248 ms </codapi-status>
+    </codapi-toolbar>
+    <codapi-output>
+        <pre><code>Hello, World!</code></pre>
+    </codapi-output>
+</codapi-snippet>
+```
+
+`codapi-snippet` is the top-level element. It contains the the toolbar (`codapi-toolbar`) and the code execution output (`codapi-output`). The toolbar contains a Run `button`, one or more action buttons (`a`) and a status bar (`codapi-status`).
 
 ## License
 
