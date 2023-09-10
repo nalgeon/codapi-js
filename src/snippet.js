@@ -237,25 +237,26 @@ class CodeSnippet {
     // handleIndent indents text with Tab
     handleIndent(event) {
         if (event.key != "Tab") {
-            return false;
+            return;
         }
         event.preventDefault();
         document.execCommand("insertHTML", false, " ".repeat(TAB_WIDTH));
-        return true;
+        return;
     }
 
     // handleExecute truggers 'execute' event by Ctrl/Cmd+Enter
     handleExecute(event) {
         // Ctrl+Enter or Cmd+Enter
         if (!event.ctrlKey && !event.metaKey) {
-            return false;
+            return;
         }
         // 10 and 13 are Enter codes
         if (event.keyCode != 10 && event.keyCode != 13) {
-            return false;
+            return;
         }
+        event.preventDefault();
         this.executeFunc();
-        return true;
+        return;
     }
 
     // onPaste converts the pasted data to plain text
