@@ -106,6 +106,11 @@ class CodapiSnippet extends HTMLElement {
                 this.snippet.focusEnd();
             });
         }
+
+        // hide output
+        this.snippet.addEventListener("hide", (e) => {
+            this.output.hide();
+        });
     }
 
     // findCodeElement returns the element containing the code snippet.
@@ -185,8 +190,9 @@ class CodapiSnippet extends HTMLElement {
 }
 
 // CodeSnippet is a wrapper for the code viewer/editor element.
-class CodeSnippet {
+class CodeSnippet extends EventTarget {
     constructor(el, mode, executeFunc) {
+        super();
         this.el = el;
         this.mode = mode;
         this.executeFunc = executeFunc;
@@ -213,10 +219,12 @@ class CodeSnippet {
         this.el.contentEditable = "true";
         // indent on Tab
         this.el.addEventListener("keydown", this.handleIndent.bind(this));
+        // hide output on Esc
+        this.el.addEventListener("keydown", this.handleHide.bind(this));
+        // execute on Ctrl+Enter
+        this.el.addEventListener("keydown", this.handleExecute.bind(this));
         // always paste as plain text
         this.el.addEventListener("paste", this.onPaste.bind(this));
-        // execute shortcut
-        this.el.addEventListener("keydown", this.handleExecute.bind(this));
         // init editor on first focus
         this.onFocus = this.initEditor.bind(this);
         this.el.addEventListener("focus", this.onFocus);
@@ -241,7 +249,15 @@ class CodeSnippet {
         }
         event.preventDefault();
         document.execCommand("insertHTML", false, " ".repeat(TAB_WIDTH));
-        return;
+    }
+
+    // handleHide hides the output on Esc
+    handleHide(event) {
+        if (event.key != "Escape") {
+            return;
+        }
+        event.preventDefault();
+        this.dispatchEvent(new Event("hide"));
     }
 
     // handleExecute truggers 'execute' event by Ctrl/Cmd+Enter
@@ -256,7 +272,6 @@ class CodeSnippet {
         }
         event.preventDefault();
         this.executeFunc();
-        return;
     }
 
     // onPaste converts the pasted data to plain text
