@@ -1,4 +1,5 @@
 // Execute code using the Codapi sandbox server.
+import { fetchTimeout } from "../http.js";
 
 const defaultUrl = "https://api.codapi.org/v1";
 const defaultErrMsg = "Something is wrong with Codapi.";
@@ -16,7 +17,7 @@ const errors = {
 async function exec(apiUrl, data) {
     try {
         const url = `${apiUrl || defaultUrl}/exec`;
-        const resp = await fetch(url, {
+        const resp = await fetchTimeout(url, {
             method: "POST",
             headers: {
                 accept: "application/json",

@@ -1,4 +1,5 @@
 // Execute HTTP request from a spec.
+import { fetchTimeout } from "../http.js";
 
 // exec sends an HTTP request according to the specification.
 async function exec(url, data) {
@@ -100,7 +101,7 @@ async function sendRequest(spec) {
         headers: spec.headers,
         body: spec.body || undefined,
     };
-    return await fetch(spec.url, options);
+    return await fetchTimeout(spec.url, options);
 }
 
 // responseText returns the response as text
