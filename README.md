@@ -45,7 +45,7 @@ npm install @antonz/codapi
 Or use a CDN:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi@0.4.1/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.4.2/dist/snippet.js"></script>
 ```
 
 ## Usage
@@ -80,14 +80,14 @@ Finally, include the default styles in the `head`:
 ```html
 <link
     rel="stylesheet"
-    href="https://unpkg.com/@antonz/codapi@0.4.1/dist/snippet.css"
+    href="https://unpkg.com/@antonz/codapi@0.4.2/dist/snippet.css"
 />
 ```
 
 And the JavaScript file at the bottom of the page:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi@0.4.1/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.4.2/dist/snippet.js"></script>
 ```
 
 (CDNs like unpkg can sometimes be slow, so it's even better to host both files yourself)
@@ -196,8 +196,8 @@ Alternatively, you can use an in-page `script` tag with a code template and pass
 
 ```html
 <script id="main.py" type="text/plain">
-def main():
-    ##CODE##
+    def main():
+        ##CODE##
 </script>
 
 <pre>
@@ -245,8 +245,8 @@ You can also define files using in-page `script`s:
 
 ```html
 <script id="npc.py" type="text/plain">
-def greet(name):
-    print(f"Hello, {name}")
+    def greet(name):
+        print(f"Hello, {name}")
 </script>
 
 <pre>
