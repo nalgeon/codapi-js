@@ -19,8 +19,19 @@ codapi-status {
 }
 
 codapi-output {
+    position: relative;
     display: block;
 }
 codapi-output[hidden] {
     display: none;
+}
+codapi-output a[href="#close"] {
+    position: absolute;
+    top: 0.25em;
+    right: 0.25em;
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
+    text-align: center;
 }
