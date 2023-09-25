@@ -7,6 +7,7 @@ const networkErrMsg = "Either Codapi is down or there is a network problem.";
 
 const errors = {
     400: "Bad request. Something is wrong with the request, not sure what.",
+    404: "Unknown sandbox or command.",
     403: "Forbidden. Your domain is probably not allowed on Codapi.",
     413: "Request is too large. Try submitting less code.",
     429: "Too many requests. Try again in a few seconds.",
