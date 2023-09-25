@@ -11,15 +11,15 @@ template.innerHTML = `
 class CodapiOutput extends HTMLElement {
     constructor() {
         super();
-        this.appendChild(template.content.cloneNode(true));
-        this.close = this.querySelector("a");
-        this.output = this.querySelector("pre > code");
     }
 
     connectedCallback() {
         if (this.ready) {
             return;
         }
+        this.appendChild(template.content.cloneNode(true));
+        this.close = this.querySelector("a");
+        this.output = this.querySelector("pre > code");
         this.close.addEventListener("click", (e) => {
             e.preventDefault();
             this.hide();

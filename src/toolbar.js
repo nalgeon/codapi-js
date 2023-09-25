@@ -13,7 +13,6 @@ template.innerHTML = `
 class CodapiToolbar extends HTMLElement {
     constructor() {
         super();
-        this.appendChild(template.content.cloneNode(true));
     }
 
     connectedCallback() {
@@ -26,6 +25,7 @@ class CodapiToolbar extends HTMLElement {
     }
 
     render() {
+        this.appendChild(template.content.cloneNode(true));
         this.run = this.querySelector("button");
         this.edit = this.querySelector("a");
         this.status = this.querySelector("codapi-status");

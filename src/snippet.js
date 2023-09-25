@@ -42,8 +42,6 @@ class CodapiSnippet extends HTMLElement {
         this.snippet = null;
         this.toolbar = null;
         this.output = null;
-
-        this.appendChild(template.content.cloneNode(true));
     }
 
     connectedCallback() {
@@ -71,6 +69,7 @@ class CodapiSnippet extends HTMLElement {
 
     // render prepares an interactive snippet.
     render() {
+        this.appendChild(template.content.cloneNode(true));
         const codeEl = this.findCodeElement();
         this.snippet = new CodeSnippet(
             codeEl,
