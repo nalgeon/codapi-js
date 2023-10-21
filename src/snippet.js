@@ -76,10 +76,15 @@ class CodapiSnippet extends HTMLElement {
             this.editor,
             this.execute.bind(this)
         );
+
         this.toolbar = this.querySelector("codapi-toolbar");
         const actions = this.getAttribute("actions");
         this.toolbar.addActions(actions ? actions.split(" ") : null);
+
         this.output = this.querySelector("codapi-output");
+        if (this.hasAttribute("output")) {
+            this.showSampleOutput(this.getAttribute("output"));
+        }
     }
 
     // listen allows running and editing the code.
@@ -154,6 +159,21 @@ class CodapiSnippet extends HTMLElement {
         } finally {
             this.output.fadeIn();
         }
+    }
+
+    // showSampleOutput shows the predefined output for the snippet
+    // (if any, according to the `output` attribute).
+    showSampleOutput(selector) {
+        let sample =
+            selector == ""
+                ? this.nextElementSibling
+                : document.querySelector(selector);
+        if (!sample) {
+            return;
+        }
+        sample = sample.querySelector("code") || sample;
+        this.output.showMessage(sample.innerHTML);
+        sample.parentElement.removeChild(sample);
     }
 
     // showStatus shows a custom message in the status bar.
