@@ -81,6 +81,17 @@ class CodapiSnippet extends HTMLElement {
         const actions = this.getAttribute("actions");
         this.toolbar.addActions(actions ? actions.split(" ") : null);
 
+        const status = this.toolbar.querySelector("codapi-status");
+        if (this.hasAttribute("status-running")) {
+            status.setAttribute("running", this.getAttribute("status-running"));
+        }
+        if (this.hasAttribute("status-failed")) {
+            status.setAttribute("failed", this.getAttribute("status-failed"));
+        }
+        if (this.hasAttribute("status-done")) {
+            status.setAttribute("done", this.getAttribute("status-done"));
+        }
+
         this.output = this.querySelector("codapi-output");
         if (this.hasAttribute("output")) {
             this.showSampleOutput(this.getAttribute("output"));
