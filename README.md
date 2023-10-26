@@ -45,7 +45,7 @@ npm install @antonz/codapi
 Or use a CDN:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi@0.6.0/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.6.1/dist/snippet.js"></script>
 ```
 
 ## Usage
@@ -80,14 +80,14 @@ Finally, include the default styles in the `head`:
 ```html
 <link
     rel="stylesheet"
-    href="https://unpkg.com/@antonz/codapi@0.6.0/dist/snippet.css"
+    href="https://unpkg.com/@antonz/codapi@0.6.1/dist/snippet.css"
 />
 ```
 
 And the JavaScript file at the bottom of the page:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi@0.6.0/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.6.1/dist/snippet.js"></script>
 ```
 
 (CDNs like unpkg can sometimes be slow, so it's even better to host both files yourself)
