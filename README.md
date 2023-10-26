@@ -357,7 +357,7 @@ Here is the widget structure:
     <codapi-toolbar>
         <button>Run</button>
         <a href="#edit">Edit</a>
-        <codapi-status> ✓ Took 1248 ms </codapi-status>
+        <codapi-status> ✓ Done </codapi-status>
     </codapi-toolbar>
     <codapi-output>
         <pre><code>Hello, World!</code></pre>

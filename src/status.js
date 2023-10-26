@@ -2,9 +2,9 @@
 import { sanitize } from "./text.js";
 
 const messages = {
-    running: "It may take a while...",
+    running: "Running...",
     failed: "✘ Failed",
-    done: "✓ Took $DURATION ms",
+    done: "✓ Done",
 };
 
 // CodapiStatus shows the execution status.
