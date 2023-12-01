@@ -52,6 +52,7 @@ class CodapiSnippet extends HTMLElement {
         this.render();
         this.listen();
         this.ready = true;
+        this.dispatchEvent(new Event("load"));
     }
 
     // init initializes the component state.
