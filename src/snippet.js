@@ -131,11 +131,27 @@ class CodapiSnippet extends HTMLElement {
 
     // findCodeElement returns the element containing the code snippet.
     findCodeElement() {
-        if (this.selector) {
-            return document.querySelector(this.selector);
+        if (!this.selector) {
+            // search for `code` in the previous sibling
+            const prev = this.previousElementSibling;
+            return prev.querySelector("code") || prev;
         }
-        const prev = this.previousElementSibling;
-        return prev.querySelector("code") || prev;
+
+        let el;
+        if (this.selector.startsWith("@prev")) {
+            // search for selector in the previous sibling
+            const prev = this.previousElementSibling;
+            const selector = this.selector.split(" ").slice(1).join(" ");
+            el = prev.querySelector(selector);
+        } else {
+            // search for selector globally
+            el = document.querySelector(this.selector);
+        }
+
+        if (!el) {
+            throw Error(`element not found: ${this.selector}`);
+        }
+        return el;
     }
 
     // execute runs the code.
