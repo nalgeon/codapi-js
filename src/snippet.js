@@ -347,7 +347,8 @@ class CodeElement extends EventTarget {
 
     // value is the plain text code value.
     get value() {
-        return this.el.innerText.trim();
+        // trim and convert non-breaking spaces to normal ones
+        return this.el.innerText.trim().replace(/[\u00A0]/g, " ");
     }
     set value(val) {
         this.el.innerHTML = sanitize(val);
