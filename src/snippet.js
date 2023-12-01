@@ -48,11 +48,16 @@ class CodapiSnippet extends HTMLElement {
         if (this.ready) {
             return;
         }
-        this.init();
-        this.render();
-        this.listen();
-        this.ready = true;
-        this.dispatchEvent(new Event("load"));
+        // the initialization can be delayed,
+        // e.g. if we have to wait for syntax highlighting
+        const timeout = parseInt(this.getAttribute("init-delay"), 10) || 0;
+        delay(() => {
+            this.init();
+            this.render();
+            this.listen();
+            this.ready = true;
+            this.dispatchEvent(new Event("load"));
+        }, timeout);
     }
 
     // init initializes the component state.
@@ -347,6 +352,16 @@ class CodeSnippet extends EventTarget {
     set value(val) {
         this.el.innerHTML = sanitize(val);
     }
+}
+
+// delay executes a function after a timeout,
+// or immediately if the timeout is zero.
+function delay(func, timeout) {
+    if (timeout <= 0) {
+        func();
+        return;
+    }
+    setTimeout(func, timeout);
 }
 
 if (!window.customElements.get("codapi-snippet")) {
