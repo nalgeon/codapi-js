@@ -77,7 +77,7 @@ class CodapiSnippet extends HTMLElement {
     render() {
         this.appendChild(template.content.cloneNode(true));
         const codeEl = this.findCodeElement();
-        this.snippet = new CodeSnippet(
+        this.snippet = new CodeElement(
             codeEl,
             this.editor,
             this.execute.bind(this)
@@ -241,8 +241,8 @@ class CodapiSnippet extends HTMLElement {
     }
 }
 
-// CodeSnippet is a wrapper for the code viewer/editor element.
-class CodeSnippet extends EventTarget {
+// CodeElement is a wrapper for the code viewer/editor element.
+class CodeElement extends EventTarget {
     constructor(el, mode, executeFunc) {
         super();
         this.el = el;
