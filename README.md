@@ -51,6 +51,7 @@ Optional styles:
 See the guide that best fits your use case:
 
 -   [HTML/Markdown](docs/html.md)
+-   [Docusaurus](docs/docusaurus.md)
 -   [WordPress](docs/html.md)
 
 ## Browser-only playgrounds
