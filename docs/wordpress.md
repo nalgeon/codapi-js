@@ -85,7 +85,7 @@ And here comes your interactive code snippet with syntax highlighting!
 
 ## Using templates
 
-Suppose you are writing an article about sorting syntax in SQL. To keep the code snippets from getting too verbose, you'll probably want to show only the SELECT queries, not the CREATE TABLE and INSERTs that prepare the data.
+Suppose you are writing an article about ordering syntax in SQL. To keep the code snippets from getting too verbose, you'll probably want to show only the SELECT queries, not the CREATE TABLE and INSERTs that prepare the data.
 
 That's where the templates come in handy. They help to keep snippets concise by hiding parts of the code behind the scenes.
 
