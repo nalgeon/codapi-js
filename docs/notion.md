@@ -27,7 +27,7 @@ You can add as many code links per page as you like.
 
 ## Embeds
 
-Embeds are Notion's way of including external website content into Notion pages. Here is how to embed Codapi playgrounds using embeds:
+Embeds are Notion's way of including external website content into Notion pages. Here is how to add Codapi playgrounds to Notion pages using embeds:
 
 First, write some code using the Codapi [Embed](https://codapi.org/embed/add/) page (choose the appropriate playground first) and click _Share_. You'll get a shareable link to your specific code snippet.
 
