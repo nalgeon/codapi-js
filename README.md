@@ -52,7 +52,7 @@ See the guide that best fits your use case:
 
 -   [HTML/Markdown](docs/html.md)
 -   [Docusaurus](docs/docusaurus.md)
--   [WordPress](docs/html.md)
+-   [WordPress](docs/wordpress.md)
 -   [Dev.to/Medium/Substack/Newsletter](docs/code-links.md) (or other platforms that do not support JavaScript embeds)
 
 ## Browser-only playgrounds
