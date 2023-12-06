@@ -29,6 +29,8 @@ class CodapiToolbar extends HTMLElement {
         this.run = this.querySelector("button");
         this.edit = this.querySelector("a");
         this.status = this.querySelector("codapi-status");
+        const actions = this.getAttribute("actions");
+        this.addActions(actions ? actions.split(" ") : null);
     }
 
     listen() {

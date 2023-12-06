@@ -12,7 +12,8 @@ class Action {
     }
 
     // parse creates an Action from a text representation:
-    // [Run tests]command=test -> Action("Run tests", "command", "test")
+    // Run_tests:test -> Action("Run tests", "command", "test")
+    // Share:@share -> Action("Share", "event", "share")
     static parse(spec) {
         const match = specRE.exec(spec);
         if (!match) {
