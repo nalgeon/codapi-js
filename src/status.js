@@ -20,8 +20,9 @@ class CodapiStatus extends HTMLElement {
 
     // showFinished shows succeeded/failed status.
     showFinished(result) {
-        if (!result || !result.ok) {
-            this.innerHTML = this.getAttribute("failed") || messages.failed;
+        if (!result.ok) {
+            this.innerHTML =
+                result.error || this.getAttribute("failed") || messages.failed;
             return;
         }
 

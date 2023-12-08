@@ -8,6 +8,14 @@ import { CodapiOutput } from "./output.js";
 import { Executor } from "./executor.js";
 import { sanitize } from "./text.js";
 
+// UI messages.
+const messages = {
+    failure: {
+        short: "✘ Network or server failure",
+        long: "Either Codapi is down or there is a network failure.",
+    },
+};
+
 // Snippet state.
 const State = {
     unknown: "unknown",
@@ -42,6 +50,7 @@ class CodapiSnippet extends HTMLElement {
         this.snippet = null;
         this.toolbar = null;
         this.output = null;
+        this.fallback = null;
     }
 
     connectedCallback() {
@@ -100,7 +109,7 @@ class CodapiSnippet extends HTMLElement {
 
         this.output = this.querySelector("codapi-output");
         if (this.hasAttribute("output")) {
-            this.showSampleOutput(this.getAttribute("output"));
+            this.fallback = this.extractFallback(this.getAttribute("output"));
         }
     }
 
@@ -159,6 +168,44 @@ class CodapiSnippet extends HTMLElement {
         return el;
     }
 
+    // extractFallback extracts the predefined result for the snippet.
+    extractFallback(selector) {
+        const el = this.findOutputElement(selector);
+        const stdoutEl = el.querySelector("code") || el;
+        const stdout = stdoutEl.innerText.trim();
+        el.parentElement.removeChild(el);
+        return {
+            ok: false,
+            duration: 0,
+            error: messages.failure.short,
+            stdout: stdout,
+            stderr: "",
+        };
+    }
+
+    // findOutputElement returns the element containing the default code output.
+    findOutputElement(selector) {
+        if (!selector) {
+            return this.nextElementSibling;
+        }
+
+        let el;
+        if (selector.startsWith("@next")) {
+            // search for selector in the next sibling
+            const next = this.nextElementSibling;
+            const selector = selector.split(" ").slice(1).join(" ");
+            el = next.querySelector(selector);
+        } else {
+            // search for selector globally
+            el = document.querySelector(selector);
+        }
+
+        if (!el) {
+            throw Error(`element not found: ${selector}`);
+        }
+        return el;
+    }
+
     // execute runs the code.
     async execute(command = undefined) {
         if (!this.code) {
@@ -184,29 +231,20 @@ class CodapiSnippet extends HTMLElement {
             this.output.showResult(result);
             this.dispatchEvent(new CustomEvent("result", { detail: result }));
         } catch (exc) {
-            // show error
+            if (this.fallback) {
+                // show fallback results
+                this.toolbar.showFinished(this.fallback);
+                this.output.showResult(this.fallback);
+            } else {
+                // show error
+                this.toolbar.showFinished({});
+                this.output.showMessage(messages.failure.long);
+            }
             this.state = State.failed;
-            this.toolbar.showFinished(null);
-            this.output.showError(exc);
             this.dispatchEvent(new CustomEvent("error", { detail: exc }));
         } finally {
             this.output.fadeIn();
         }
-    }
-
-    // showSampleOutput shows the predefined output for the snippet
-    // (if any, according to the `output` attribute).
-    showSampleOutput(selector) {
-        let sample =
-            selector == ""
-                ? this.nextElementSibling
-                : document.querySelector(selector);
-        if (!sample) {
-            return;
-        }
-        sample = sample.querySelector("code") || sample;
-        this.output.showMessage(sample.innerHTML);
-        sample.parentElement.removeChild(sample);
     }
 
     // showStatus shows a custom message in the status bar.

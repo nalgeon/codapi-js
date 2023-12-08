@@ -3,7 +3,6 @@ import { fetchTimeout } from "../http.js";
 
 const defaultUrl = "https://api.codapi.org/v1";
 const defaultErrMsg = "Something is wrong with Codapi.";
-const networkErrMsg = "Either Codapi is down or there is a network problem.";
 
 const errors = {
     400: "Bad request. Something is wrong with the request, not sure what.",
@@ -37,12 +36,9 @@ async function exec(apiUrl, data) {
         }
         return await resp.json();
     } catch (exc) {
-        return {
-            ok: false,
-            duration: 0,
-            stdout: networkErrMsg,
-            stderr: `(${exc})`,
-        };
+        // Network or server failure. Not returning the result object,
+        // as we should handle such errors differently (e.g. show fallback)
+        throw exc;
     }
 }
 
