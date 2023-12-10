@@ -24,7 +24,7 @@ Highlights:
 -   Lightweight and easy to integrate.
 -   Open source.
 
-Learn more at [**codapi.org**](https://codapi.org/)
+For an introduction to Codapi, see this post: [Interactive code examples for fun and profit](https://antonz.org/code-examples/).
 
 ## Installation
 
