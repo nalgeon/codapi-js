@@ -77,10 +77,35 @@ async function readFile(path) {
         // read external file
         const name = path.split("/").pop();
         const resp = await fetch(path);
-        const text = await resp.text();
-        return [name, text];
+        const data = await encodeResponse(resp);
+        return [name, data];
     } catch (err) {
         throw new Error(`file ${path} not found`, { cause: err });
     }
 }
+
+// encodeResponse serializes response content
+// according to the content type, either as text
+// or as a data-url encoded binary value.
+async function encodeResponse(resp) {
+    const contentType = resp.headers.get("content-type");
+    if (contentType == "application/octet-stream") {
+        const blob = await resp.blob();
+        return await asDataURL(blob);
+    } else {
+        return await resp.text();
+    }
+}
+
+// asDataURL encodes a Blob value as a data URL.
+function asDataURL(blob) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function () {
+            resolve(reader.result);
+        };
+    });
+}
+
 export { Executor };
