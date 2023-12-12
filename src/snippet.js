@@ -324,9 +324,16 @@ class CodeElement extends EventTarget {
     // for editing for the first time.
     initEditor(event) {
         const code = event.target;
-        if (code.innerHTML.includes("</span>")) {
+        if (
+            code.innerHTML.startsWith('<span class="line">') ||
+            code.innerHTML.startsWith('<span style="display:flex">')
+        ) {
             // remove syntax highlighting
+            // remove double line feed
             code.innerHTML = code.innerText.replace(/\n\n/g, "\n");
+        } else if (code.innerHTML.includes("</span>")) {
+            // remove syntax highlighting
+            code.innerHTML = code.innerText;
         }
         code.removeEventListener("focus", this.onFocus);
         delete this.onFocus;
