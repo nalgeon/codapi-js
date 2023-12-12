@@ -39,13 +39,13 @@ Note two properties here:
 Finally, include the default styles in the `head`:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.9.0/dist/snippet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.9.1/dist/snippet.css"/>
 ```
 
 And the JavaScript file at the bottom of the page:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi@0.9.0/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.9.1/dist/snippet.js"></script>
 ```
 
 (CDNs like unpkg can sometimes be slow, so it's even better to host both files yourself)
