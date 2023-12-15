@@ -67,21 +67,23 @@ class Executor {
 // readFile loads file content from either a `script` element
 // or an external file and returns it as text.
 async function readFile(path) {
-    try {
-        if (path[0] == "#") {
-            // get `script` by id and return its content
-            const name = path.slice(1);
-            const text = document.getElementById(name).text;
-            return [name, text];
+    if (path[0] == "#") {
+        // get `script` by id and return its content
+        const name = path.slice(1);
+        const el = document.getElementById(name);
+        if (!el) {
+            throw new Error(`element ${path} not found`);
         }
-        // read external file
-        const name = path.split("/").pop();
-        const resp = await fetch(path);
-        const data = await encodeResponse(resp);
-        return [name, data];
-    } catch (err) {
-        throw new Error(`file ${path} not found`, { cause: err });
+        return [name, el.text];
     }
+    // read external file
+    const name = path.split("/").pop();
+    const resp = await fetch(path);
+    if (resp.status != 200) {
+        throw new Error(`file ${path} not found`);
+    }
+    const data = await encodeResponse(resp);
+    return [name, data];
 }
 
 // encodeResponse serializes response content

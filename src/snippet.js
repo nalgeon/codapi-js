@@ -10,10 +10,7 @@ import { sanitize } from "./text.js";
 
 // UI messages.
 const messages = {
-    failure: {
-        short: "✘ Network or server failure",
-        long: "Either Codapi is down or there is a network failure.",
-    },
+    fallback: "✘ Failed, using fallback",
 };
 
 // Snippet state.
@@ -177,7 +174,6 @@ class CodapiSnippet extends HTMLElement {
         return {
             ok: false,
             duration: 0,
-            error: messages.failure.short,
             stdout: stdout,
             stderr: "",
         };
@@ -233,13 +229,14 @@ class CodapiSnippet extends HTMLElement {
         } catch (exc) {
             if (this.fallback) {
                 // show fallback results
-                this.toolbar.showFinished(this.fallback);
+                this.toolbar.showStatus(messages.fallback);
                 this.output.showResult(this.fallback);
             } else {
                 // show error
                 this.toolbar.showFinished({});
-                this.output.showMessage(messages.failure.long);
+                this.output.showMessage(exc.message);
             }
+            console.error(exc);
             this.state = State.failed;
             this.dispatchEvent(new CustomEvent("error", { detail: exc }));
         } finally {

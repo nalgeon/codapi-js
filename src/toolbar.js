@@ -83,6 +83,7 @@ class CodapiToolbar extends HTMLElement {
     }
 
     showStatus(message) {
+        this.run.removeAttribute("disabled");
         this.status.showMessage(message);
     }
 

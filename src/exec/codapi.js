@@ -38,7 +38,7 @@ async function exec(apiUrl, data) {
     } catch (exc) {
         // Network or server failure. Not returning the result object,
         // as we should handle such errors differently (e.g. show fallback)
-        throw exc;
+        throw new Error(`request to ${apiUrl} failed`, { cause: exc });
     }
 }
 
