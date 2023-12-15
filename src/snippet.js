@@ -330,10 +330,10 @@ class CodeElement extends EventTarget {
         ) {
             // remove syntax highlighting
             // remove double line feed
-            code.innerHTML = code.innerText.replace(/\n\n/g, "\n");
+            code.innerText = code.innerText.replace(/\n\n/g, "\n");
         } else if (code.innerHTML.includes("</span>")) {
             // remove syntax highlighting
-            code.innerHTML = code.innerText;
+            code.innerText = code.innerText;
         }
         code.removeEventListener("focus", this.onFocus);
         delete this.onFocus;
@@ -379,7 +379,7 @@ class CodeElement extends EventTarget {
             "text/plain"
         );
         // insert text manually
-        document.execCommand("insertHTML", false, text);
+        document.execCommand("insertText", false, text);
     }
 
     // focusEnd sets the cursor to the end of the element's content.

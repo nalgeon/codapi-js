@@ -67,7 +67,7 @@ class CodapiToolbar extends HTMLElement {
             });
             this.dispatchEvent(event);
         });
-        btn.innerHTML = action.title;
+        btn.innerText = action.title;
         btn.href = "#" + action.value;
         return btn;
     }

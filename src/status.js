@@ -21,7 +21,7 @@ class CodapiStatus extends HTMLElement {
     // showFinished shows succeeded/failed status.
     showFinished(result) {
         if (!result.ok) {
-            this.innerHTML =
+            this.innerText =
                 result.error || this.getAttribute("failed") || messages.failed;
             return;
         }
@@ -35,7 +35,7 @@ class CodapiStatus extends HTMLElement {
 
     // showMessage shows a custom message.
     showMessage(message) {
-        this.innerHTML = sanitize(message);
+        this.innerText = message;
     }
 }
 

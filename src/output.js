@@ -54,7 +54,7 @@ class CodapiOutput extends HTMLElement {
 
     // showMessage shows a message.
     showMessage(msg) {
-        this.output.innerHTML = msg;
+        this.output.innerText = msg;
         if (msg) {
             this.show();
         } else {
