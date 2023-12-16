@@ -76,6 +76,7 @@ class CodapiSnippet extends HTMLElement {
             template: this.getAttribute("template"),
             files: filesStr ? filesStr.split(" ") : null,
         });
+        this.dependsOn = this.getAttribute("depends-on");
         this.state = State.unknown;
     }
 
@@ -211,15 +212,14 @@ class CodapiSnippet extends HTMLElement {
 
         try {
             // prepare to execute
-            this.dispatchEvent(
-                new CustomEvent("execute", { detail: this.code })
-            );
+            const code = gatherCode(this);
+            this.dispatchEvent(new CustomEvent("execute", { detail: code }));
             this.state = State.running;
             this.toolbar.showRunning();
             this.output.fadeOut();
 
             // execute code
-            const result = await this.executor.execute(command, this.code);
+            const result = await this.executor.execute(command, code);
 
             // show results
             this.state = result.ok ? State.succeded : State.failed;
@@ -395,6 +395,27 @@ class CodeElement extends EventTarget {
     set value(val) {
         this.el.innerHTML = sanitize(val);
     }
+}
+
+// gatherCode walks snippet dependencies backwards
+// and builds the complete code from the first snippet
+// to the last (which is the current one).
+function gatherCode(curSnip) {
+    let code = curSnip.code;
+    let ids = curSnip.dependsOn ? curSnip.dependsOn.split(" ") : [];
+    for (const id of ids) {
+        const snip = document.getElementById(id);
+        if (!snip) {
+            throw new Error(`#${id} dependency not found`);
+        }
+        code = snip.code + "\n" + code;
+        if (snip.dependsOn) {
+            ids.push(
+                ...snip.dependsOn.split(" ").filter((i) => !ids.includes(i))
+            );
+        }
+    }
+    return code;
 }
 
 // delay executes a function after a timeout,
