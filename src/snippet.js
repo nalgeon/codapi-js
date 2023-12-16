@@ -323,7 +323,7 @@ class CodeElement extends EventTarget {
         const code = event.target;
         if (
             code.innerHTML.startsWith('<span class="line">') ||
-            code.innerHTML.startsWith('<span style="display:flex;">')
+            code.innerHTML.startsWith('<span style="display:flex')
         ) {
             // remove syntax highlighting
             // remove double line feed
