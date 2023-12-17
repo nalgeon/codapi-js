@@ -8,6 +8,7 @@ Here is how to embed interactive code snippets into your HTML or Markdown pages:
 -   [Templates](#templates)
 -   [Files](#files)
 -   [Custom actions](#custom-actions)
+-   [Self-hosted server](#self-hosted-server)
 
 ## Interactive code block
 
@@ -261,3 +262,22 @@ If you want the button title to contain spaces, replace them with underscores:
 <codapi-snippet sandbox="python" actions="Run_Tests:test Share_Code:@share">
 </codapi-snippet>
 ```
+
+## Self-hosted server
+
+If you are using a self-hosted [codapi server](https://github.com/nalgeon/codapi), point the widget to it using the `url` attribute:
+
+```html
+<codapi-snippet sandbox="python" url="http://localhost:1313/v1">
+</codapi-snippet>
+```
+
+Specify the protocol (`http`/`https`) and hostname or IP like this:
+
+```
+http://localhost:1313/v1
+http://192.168.1.42:1313/v1
+https://codapi.example.org/v1
+```
+
+Note that the `/v1` part stays the same — it's the path the Codapi server uses for API requests.
