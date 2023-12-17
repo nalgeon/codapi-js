@@ -1,8 +1,8 @@
-# Embeddable code playgrounds
+# Interactive code examples
 
-_for education, documentation, and fun_ 🎉
+_for documentation, education and fun_ 🎉
 
-Embed interactive code snippets directly into your product documentation, online course, or blog post.
+Embed interactive code snippets directly into your product documentation, online course or blog post.
 
 ```
 ┌───────────────────────────────┐
@@ -19,10 +19,10 @@ Embed interactive code snippets directly into your product documentation, online
 
 Highlights:
 
--   Supports dozens of playgrounds out of the box, plus custom sandboxes if you need them.
--   Available as a cloud service and as a self-hosted version.
+-   Automatically converts static code examples into mini-playgrounds.
 -   Lightweight and easy to integrate.
--   Open source.
+-   Sandboxes for any programming language, database, or software.
+-   Open source. Uses the permissive Apache-2.0 license.
 
 For an introduction to Codapi, see this post: [Interactive code examples for fun and profit](https://antonz.org/code-examples/).
 
@@ -85,7 +85,7 @@ Here is the widget structure:
 
 ## License
 
-Copyright 2023+ [Anton Zhiyanov](https://antonz.org/).
+Copyright 2023 [Anton Zhiyanov](https://antonz.org/).
 
 The software is available under the MIT License.
 
