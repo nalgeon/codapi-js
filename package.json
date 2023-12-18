@@ -1,6 +1,6 @@
 {
     "name": "@antonz/codapi",
-    "version": "0.10.1",
+    "version": "0.10.2",
     "description": "Embeddable code playgrounds for education, documentation, and fun.",
     "author": "Anton Zhiyanov",
     "license": "MIT",
