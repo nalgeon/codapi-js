@@ -45,7 +45,7 @@ class Executor {
             return code;
         }
         const placeholder = "##CODE##";
-        const [_, template] = await readFile(this.template);
+        const [_, template] = await readFile(this.template, encodeText);
         code = template.replace(placeholder, code);
         return code;
     }
@@ -57,7 +57,7 @@ class Executor {
         }
         const files = {};
         for (let path of this.files) {
-            const [name, file] = await readFile(path);
+            const [name, file] = await readFile(path, encodeResponse);
             files[name] = file;
         }
         return files;
@@ -65,8 +65,8 @@ class Executor {
 }
 
 // readFile loads file content from either a `script` element
-// or an external file and returns it as text.
-async function readFile(path) {
+// or an external file and returns its serialized value.
+async function readFile(path, encodeFunc) {
     if (path[0] == "#") {
         // get `script` by id and return its content
         const name = path.slice(1);
@@ -82,8 +82,13 @@ async function readFile(path) {
     if (resp.status != 200) {
         throw new Error(`file ${path} not found`);
     }
-    const data = await encodeResponse(resp);
+    const data = await encodeFunc(resp);
     return [name, data];
+}
+
+// encodeText serializes response content as text.
+async function encodeText(resp) {
+    return await resp.text();
 }
 
 // encodeResponse serializes response content
