@@ -1,5 +1,4 @@
 // An execution status message.
-import { sanitize } from "./text.js";
 
 const messages = {
     running: "Running...",

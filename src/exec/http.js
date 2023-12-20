@@ -1,5 +1,6 @@
 // Execute HTTP request from a spec.
 import { fetchTimeout } from "../http.js";
+import text from "../text.js";
 
 // exec sends an HTTP request according to the specification.
 async function exec(url, data) {
@@ -24,8 +25,8 @@ async function exec(url, data) {
 }
 
 // parse parses the request specification.
-function parse(text) {
-    const lines = text.split("\n");
+function parse(src) {
+    const lines = src.split("\n");
     let lineIdx = 0;
 
     // parse method and URL
@@ -53,7 +54,7 @@ function parse(text) {
         if (line === "") {
             break;
         }
-        const [headerName, headerValue] = line.split(":");
+        const [headerName, headerValue] = text.cut(line, ":");
         headers[headerName.trim()] = headerValue.trim();
         lineIdx += 1;
     }

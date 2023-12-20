@@ -1,5 +1,5 @@
 // An output of an interactive code snippet.
-import { sanitize } from "./text.js";
+import text from "./text.js";
 
 const template = document.createElement("template");
 template.innerHTML = `
@@ -43,10 +43,10 @@ class CodapiOutput extends HTMLElement {
     showResult(result) {
         let html = [];
         if (result.stdout) {
-            html.push(sanitize(result.stdout));
+            html.push(text.sanitize(result.stdout));
         }
         if (result.stderr) {
-            html.push(sanitize(result.stderr));
+            html.push(text.sanitize(result.stderr));
         }
         this.output.innerHTML = html.join("\n");
         this.show();

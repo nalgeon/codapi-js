@@ -6,7 +6,7 @@ import { CodapiToolbar } from "./toolbar.js";
 import { CodapiStatus } from "./status.js";
 import { CodapiOutput } from "./output.js";
 import { Executor } from "./executor.js";
-import { sanitize } from "./text.js";
+import text from "./text.js";
 
 // UI messages.
 const messages = {
@@ -153,7 +153,7 @@ class CodapiSnippet extends HTMLElement {
         if (this.selector.startsWith("@prev")) {
             // search for selector in the previous sibling
             const prev = this.previousElementSibling;
-            const selector = this.selector.split(" ").slice(1).join(" ");
+            const [_, selector] = text.cut(this.selector, " ");
             el = prev.querySelector(selector);
         } else {
             // search for selector globally
@@ -190,7 +190,7 @@ class CodapiSnippet extends HTMLElement {
         if (selector.startsWith("@next")) {
             // search for selector in the next sibling
             const next = this.nextElementSibling;
-            const selector = selector.split(" ").slice(1).join(" ");
+            const [_, selector] = text.cut(selector, " ");
             el = next.querySelector(selector);
         } else {
             // search for selector globally
@@ -393,7 +393,7 @@ class CodeElement extends EventTarget {
         return this.el.innerText.trim().replace(/[\u00A0]/g, " ");
     }
     set value(val) {
-        this.el.innerHTML = sanitize(val);
+        this.el.innerHTML = text.sanitize(val);
     }
 }
 

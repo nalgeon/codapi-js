@@ -3,6 +3,7 @@
 import js from "./exec/javascript.js";
 import codapi from "./exec/codapi.js";
 import http from "./exec/http.js";
+import text from "./text.js";
 
 const defaultCommand = "run";
 
@@ -16,7 +17,9 @@ const execMap = {
 // An Executor runs the code and shows the results.
 class Executor {
     constructor({ sandbox, command, url, template, files }) {
-        this.sandbox = sandbox;
+        const [sandboxName, version] = text.cut(sandbox, ":");
+        this.sandbox = sandboxName;
+        this.version = version;
         this.command = command || defaultCommand;
         this.url = url;
         this.template = template;
@@ -30,6 +33,7 @@ class Executor {
         const files = await this.loadFiles();
         const result = await this.execFunc(this.url, {
             sandbox: this.sandbox,
+            version: this.version,
             command: command || this.command,
             files: {
                 "": code,
