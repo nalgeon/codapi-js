@@ -56,6 +56,8 @@ See the guide that best fits your use case:
 -   [Notion](docs/notion.md)
 -   [Dev.to/Medium/Substack/Newsletter](docs/code-links.md) (or other platforms that do not support JavaScript embeds)
 
+You'll also need a working Codapi server, either cloud-based at [codapi.org](https://codapi.org/) or [self-hosted](https://github.com/nalgeon/codapi). Unless you are using a browser-only playground (see below).
+
 ## Browser-only playgrounds
 
 Most playgrounds (like Python, PostgreSQL, or Bash) run code on the Codapi server.
