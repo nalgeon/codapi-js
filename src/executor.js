@@ -1,7 +1,7 @@
 // Execute user code.
 
-import codapi from "./exec/codapi.js";
-import browser from "./exec/browser.js";
+import codapi from "./engine/codapi.js";
+import browser from "./engine/browser.js";
 import text from "./text.js";
 
 const defaultCommand = "run";
