@@ -42,4 +42,4 @@ async function exec(apiUrl, data) {
     }
 }
 
-export default { exec };
+export default { init: () => {}, exec };

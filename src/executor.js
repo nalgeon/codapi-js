@@ -1,37 +1,38 @@
 // Execute user code.
 
-import js from "./exec/javascript.js";
 import codapi from "./exec/codapi.js";
-import http from "./exec/http.js";
+import browser from "./exec/browser.js";
 import text from "./text.js";
 
 const defaultCommand = "run";
 
-// special-case executors
-// the default one is codapi.exec
-const execMap = {
-    javascript: js.exec,
-    fetch: http.exec,
-};
-
-// An Executor runs the code and shows the results.
+// Executor runs the code and shows the results.
 class Executor {
     constructor({ sandbox, command, url, template, files }) {
-        const [sandboxName, version] = text.cut(sandbox, ":");
+        const [engineName, sandboxName, version] = parseSandbox(sandbox);
+        this.engineName = engineName;
         this.sandbox = sandboxName;
         this.version = version;
         this.command = command || defaultCommand;
         this.url = url;
         this.template = template;
         this.files = files;
-        this.execFunc = execMap[sandbox] || codapi.exec;
+    }
+
+    // engine returns the engine for the command.
+    get engine() {
+        const instance = window.Codapi.engines[this.engineName];
+        if (!instance) {
+            throw new Error(`unknown engine: ${this.engineName}`);
+        }
+        return instance;
     }
 
     // execute runs the code and shows the results.
     async execute(command, code) {
         code = await this.prepare(code);
         const files = await this.loadFiles();
-        const result = await this.execFunc(this.url, {
+        const result = await this.engine.exec(this.url, {
             sandbox: this.sandbox,
             version: this.version,
             command: command || this.command,
@@ -66,6 +67,20 @@ class Executor {
         }
         return files;
     }
+}
+
+// parseSandbox returns the engine name, sandbox name, and sandbox version
+// based on the source sandbox string. For example:
+//     "python"      -> ["codapi", "python", ""]
+//     "python:dev"  -> ["codapi", "python", "dev"]
+//     "javascript"  -> ["javascript", "javascript", ""]
+//     "wasi/python" -> ["wasi", "python", ""]
+function parseSandbox(sandbox) {
+    const [engine, sandboxWithVersion] = sandbox.includes("/")
+        ? text.cut(sandbox, "/")
+        : ["codapi", sandbox];
+    const [sandboxName, version] = text.cut(sandboxWithVersion, ":");
+    return [engine, sandboxName, version];
 }
 
 // readFile loads file content from either a `script` element
@@ -118,5 +133,15 @@ function asDataURL(blob) {
         };
     });
 }
+
+// built-in engines
+const engines = {
+    codapi: codapi,
+    browser: browser,
+};
+
+// add engines to the registry
+window.Codapi = window.Codapi || {};
+window.Codapi.engines = { ...window.Codapi.engines, ...engines };
 
 export { Executor };
