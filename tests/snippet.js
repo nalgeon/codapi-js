@@ -21,6 +21,9 @@ async function runTests() {
     await testRunError();
     await testEditAndRun();
 
+    await testEngineBrowser();
+    await testEngineWasi();
+
     await testCustomStatus();
     await testCustomSandbox();
     await testCustomCommand();
@@ -235,6 +238,62 @@ async function testEditAndRun() {
             resolve();
         });
         ui.editor.innerText = `console.log("goodbye")`;
+        ui.toolbar.run.click();
+        t.assert("status running", ui.status.innerHTML.includes("Running"));
+    });
+}
+
+async function testEngineBrowser() {
+    return new Promise((resolve, reject) => {
+        t.log("testEngineBrowser...");
+        const ui = createSnippet(`
+            <pre><code>console.log("hello")</code></pre>
+            <codapi-snippet sandbox="browser/javascript"></codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            const result = event.detail;
+            t.assert("result.ok", result.ok);
+            t.assert("result.stdout", result.stdout.trim() == "hello");
+            t.assert("result.stderr", result.stderr == "");
+            t.assert("status done", ui.status.innerHTML.includes("Done"));
+            t.assert("output", ui.output.out.innerText.trim() == "hello");
+            resolve();
+        });
+        ui.snip.addEventListener("error", () => {
+            t.assert("on error", false);
+        });
+        ui.toolbar.run.click();
+        t.assert("status running", ui.status.innerHTML.includes("Running"));
+    });
+}
+
+async function testEngineWasi() {
+    // load wasi engine
+    const wasi = document.createElement("script");
+    wasi.setAttribute("type", "module");
+    wasi.setAttribute("src", "../src/exec/runno.js");
+    document.body.appendChild(wasi);
+    await t.wait(50);
+
+    // perform test
+    return new Promise((resolve, reject) => {
+        t.log("testEngineWasi...");
+        const ui = createSnippet(`
+            <pre><code>print("hello")</code></pre>
+            <codapi-snippet sandbox="wasi/lua"></codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            const result = event.detail;
+            t.assert("result.ok", result.ok);
+            t.assert("result.stdout", result.stdout.trim() == "hello");
+            t.assert("result.stderr", result.stderr == "");
+            t.assert("status done", ui.status.innerHTML.includes("Done"));
+            t.assert("output", ui.output.out.innerText.trim() == "hello");
+            resolve();
+        });
+        ui.snip.addEventListener("error", () => {
+            t.assert("on error", false);
+        });
         ui.toolbar.run.click();
         t.assert("status running", ui.status.innerHTML.includes("Running"));
     });
