@@ -114,8 +114,7 @@ Executes the code using the [SQLite WASI runtime](https://github.com/nalgeon/sql
 
 ```html
 <pre>
-msg = "Hello, World!"
-print(msg)
+select "Hello, World!" as message;
 </pre>
 
 <codapi-snippet engine="wasi" sandbox="sqlite" editor="basic"></codapi-snippet>
