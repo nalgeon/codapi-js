@@ -37,13 +37,13 @@ npm install @antonz/codapi
 Or use a CDN:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi@0.11.0/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.12.0/dist/snippet.js"></script>
 ```
 
 Optional styles:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.11.0/dist/snippet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.12.0/dist/snippet.css" />
 ```
 
 ## Usage
@@ -56,13 +56,21 @@ See the guide that best fits your use case:
 -   [Notion](docs/notion.md)
 -   [Dev.to/Medium/Substack/Newsletter](docs/code-links.md) (or other platforms that do not support JavaScript embeds)
 
-You'll also need a working Codapi server, either cloud-based at [codapi.org](https://codapi.org/) or [self-hosted](https://github.com/nalgeon/codapi). Unless you are using a browser-only playground (see below).
+You'll also need a working Codapi server, either cloud-based at [codapi.org](https://codapi.org/) or [self-hosted](https://github.com/nalgeon/codapi). Unless you are using an in-browser playground (see below).
 
-## Browser-only playgrounds
+## In-browser playgrounds
 
-Most playgrounds (like Python, PostgreSQL, or Bash) run code on the Codapi server.
+Most playgrounds (like Go or PostgreSQL) run code on the Codapi server.
 
-But there are some playgrounds that work [completely in the browser](docs/browser-only.md), no Codapi server required.
+But there are some playgrounds that work completely in the browser, no Codapi server required:
+
+-   [JavaScript](docs/browser-only.md#javascript)
+-   [Fetch](docs/browser-only.md#fetch)
+-   [Lua](docs/browser-only.md#lua)
+-   [PHP](docs/browser-only.md#php)
+-   [Python](docs/browser-only.md#python)
+-   [Ruby](docs/browser-only.md#ruby)
+-   [SQLite](docs/browser-only.md#sqlite)
 
 ## Styling
 
@@ -87,7 +95,7 @@ Here is the widget structure:
 
 ## License
 
-Copyright 2023 [Anton Zhiyanov](https://antonz.org/).
+Copyright 2023-2024 [Anton Zhiyanov](https://antonz.org/).
 
 The software is available under the MIT License.
 
