@@ -70,6 +70,7 @@ class CodapiSnippet extends HTMLElement {
     init() {
         const filesStr = this.getAttribute("files");
         this.executor = new Executor({
+            engine: this.getAttribute("engine"),
             sandbox: this.getAttribute("sandbox"),
             command: this.getAttribute("command"),
             url: this.getAttribute("url"),

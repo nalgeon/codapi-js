@@ -226,7 +226,7 @@ async function testEditAndRun() {
         t.log("testEditAndRun...");
         const ui = createSnippet(`
             <pre><code>console.log("hello")</code></pre>
-            <codapi-snippet sandbox="browser/javascript"></codapi-snippet>
+            <codapi-snippet engine="browser" sandbox="javascript"></codapi-snippet>
         `);
         ui.snip.addEventListener("result", (event) => {
             const result = event.detail;
@@ -248,7 +248,7 @@ async function testEngineBrowser() {
         t.log("testEngineBrowser...");
         const ui = createSnippet(`
             <pre><code>console.log("hello")</code></pre>
-            <codapi-snippet sandbox="browser/javascript"></codapi-snippet>
+            <codapi-snippet engine="browser" sandbox="javascript"></codapi-snippet>
         `);
         ui.snip.addEventListener("result", (event) => {
             const result = event.detail;
@@ -271,7 +271,7 @@ async function testEngineWasi() {
     // load wasi engine
     const wasi = document.createElement("script");
     wasi.setAttribute("type", "module");
-    wasi.setAttribute("src", "../src/exec/runno.js");
+    wasi.setAttribute("src", "../src/engine/runno.js");
     document.body.appendChild(wasi);
     await t.wait(50);
 
@@ -280,7 +280,7 @@ async function testEngineWasi() {
         t.log("testEngineWasi...");
         const ui = createSnippet(`
             <pre><code>print("hello")</code></pre>
-            <codapi-snippet sandbox="wasi/lua"></codapi-snippet>
+            <codapi-snippet engine="wasi" sandbox="lua"></codapi-snippet>
         `);
         ui.snip.addEventListener("result", (event) => {
             const result = event.detail;
@@ -305,7 +305,7 @@ async function testCustomStatus() {
         const ui = createSnippet(`
             <pre><code>console.log("hello")</code></pre>
             <codapi-snippet
-                sandbox="browser/javascript"
+                engine="browser" sandbox="javascript"
                 status-running="running!"
                 status-failed="failed!"
                 status-done="done!">
@@ -325,7 +325,7 @@ async function testCustomSandbox() {
         t.log("testCustomSandbox...");
         const ui = createSnippet(`
             <pre><code>print("hello")</code></pre>
-            <codapi-snippet sandbox="codapi/python:dev"></codapi-snippet>
+            <codapi-snippet engine="codapi" sandbox="python:dev"></codapi-snippet>
         `);
         const { executor } = ui.snip;
         t.mock(executor.engine, "exec", () => {
@@ -405,7 +405,7 @@ async function testHideOutput() {
         t.log("testHideOutput...");
         const ui = createSnippet(`
             <pre><code>const n = 42;</code></pre>
-            <codapi-snippet sandbox="browser/javascript"></codapi-snippet>
+            <codapi-snippet engine="browser" sandbox="javascript"></codapi-snippet>
         `);
         ui.snip.addEventListener("result", () => {
             ui.output.close.click();
@@ -427,7 +427,8 @@ function say(msg) {
 ##CODE##
 </script>
 <pre><code>say("saying hello")</code></pre>
-<codapi-snippet sandbox="browser/javascript" template="#template"></codapi-snippet>
+<codapi-snippet engine="browser" sandbox="javascript" template="#template">
+</codapi-snippet>
         `);
         ui.snip.addEventListener("result", (event) => {
             const result = event.detail;
@@ -468,13 +469,13 @@ async function testDependsOn() {
         t.log("testDependsOn...");
         const html = `
             <pre><code>console.log("step-1")</code></pre>
-            <codapi-snippet id="step-1" sandbox="browser/javascript">
+            <codapi-snippet id="step-1" engine="browser" sandbox="javascript">
             </codapi-snippet>
             <pre><code>console.log("step-2")</code></pre>
-            <codapi-snippet id="step-2" sandbox="browser/javascript" depends-on="step-1">
+            <codapi-snippet id="step-2" engine="browser" sandbox="javascript" depends-on="step-1">
             </codapi-snippet>
             <pre><code>console.log("step-3")</code></pre>
-            <codapi-snippet id="step-3" sandbox="browser/javascript" depends-on="step-2">
+            <codapi-snippet id="step-3" engine="browser" sandbox="javascript" depends-on="step-2">
             </codapi-snippet>
         `;
         const ui = createSnippet(html);

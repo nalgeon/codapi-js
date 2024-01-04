@@ -4,13 +4,14 @@ import codapi from "./engine/codapi.js";
 import browser from "./engine/browser.js";
 import text from "./text.js";
 
+const defaultEngine = "codapi";
 const defaultCommand = "run";
 
 // Executor runs the code and shows the results.
 class Executor {
-    constructor({ sandbox, command, url, template, files }) {
-        const [engineName, sandboxName, version] = parseSandbox(sandbox);
-        this.engineName = engineName;
+    constructor({ engine, sandbox, command, url, template, files }) {
+        const [sandboxName, version] = text.cut(sandbox, ":");
+        this.engineName = engine || defaultEngine;
         this.sandbox = sandboxName;
         this.version = version;
         this.command = command || defaultCommand;
@@ -67,20 +68,6 @@ class Executor {
         }
         return files;
     }
-}
-
-// parseSandbox returns the engine name, sandbox name, and sandbox version
-// based on the source sandbox string. For example:
-//     "python"      -> ["codapi", "python", ""]
-//     "python:dev"  -> ["codapi", "python", "dev"]
-//     "javascript"  -> ["javascript", "javascript", ""]
-//     "wasi/python" -> ["wasi", "python", ""]
-function parseSandbox(sandbox) {
-    const [engine, sandboxWithVersion] = sandbox.includes("/")
-        ? text.cut(sandbox, "/")
-        : ["codapi", sandbox];
-    const [sandboxName, version] = text.cut(sandboxWithVersion, ":");
-    return [engine, sandboxName, version];
 }
 
 // readFile loads file content from either a `script` element
