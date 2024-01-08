@@ -6,6 +6,10 @@ import commands from "./wasi/commands.js";
 const { WASI } = window.Runno;
 const programs = {};
 
+// base URL (absolute or relative) for loading WASI binaries,
+// without the trailing slash.
+const basePath = new URL(getScriptUrl()).searchParams.get("path");
+
 // init downloads (if necessary) and returns a WASI binary by name.
 async function init(name) {
     if (!(name in boxes)) {
@@ -15,7 +19,8 @@ async function init(name) {
         return programs[name];
     }
     const box = boxes[name];
-    const bytes = await readFile(box.url);
+    const path = basePath || box.path;
+    const bytes = await readFile(`${path}/${box.file}`);
     programs[name] = () =>
         new Response(bytes, {
             status: 200,
@@ -82,9 +87,7 @@ function buildArgs(step, req) {
     if (!step.stdin) {
         return step.args;
     }
-    return step.args.map((arg) =>
-        arg == step.entry ? req.files[step.entry] : arg
-    );
+    return step.args.map((arg) => (arg == step.entry ? req.files[step.entry] : arg));
 }
 
 // buildFileSystem prepares the file system for running a WASI binary.
@@ -135,6 +138,14 @@ async function readFile(url) {
     }
     const buffer = await response.arrayBuffer();
     return new Uint8Array(buffer);
+}
+
+// getScriptUrl returns the full URL of the current script as a string.
+function getScriptUrl() {
+    if (typeof import.meta !== "undefined" && import.meta.url) {
+        return import.meta.url;
+    }
+    return document.currentScript.src;
 }
 
 // add the engine to the registry
