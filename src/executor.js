@@ -52,7 +52,7 @@ class Executor {
         }
         const placeholder = "##CODE##";
         const [_, template] = await readFile(this.template, encodeText);
-        code = template.replace(placeholder, code);
+        code = template.replace(placeholder, () => code);
         return code;
     }
 
