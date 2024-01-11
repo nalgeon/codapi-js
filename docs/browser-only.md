@@ -70,7 +70,7 @@ Executes the code using the [PHP WASI runtime](https://github.com/nalgeon/php-wa
 &lt;?php
 $msg = "Hello, World!";
 echo $msg;
-?gt;
+?&gt;
 </pre>
 
 <codapi-snippet engine="wasi" sandbox="php" editor="basic"></codapi-snippet>
