@@ -39,13 +39,13 @@ const config = {
 
     stylesheets: [
         {
-            href: "https://unpkg.com/@antonz/codapi@0.7.1/dist/snippet.css",
+            href: "https://unpkg.com/@antonz/codapi@0.12.2/dist/snippet.css",
         },
     ],
 
     scripts: [
         {
-            src: "https://unpkg.com/@antonz/codapi@0.7.1/dist/snippet.js",
+            src: "https://unpkg.com/@antonz/codapi@0.12.2/dist/snippet.js",
             defer: true,
         },
     ],
