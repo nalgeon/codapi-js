@@ -275,7 +275,9 @@ For example, here are the thee snippets (`create`, `insert` and `select`), where
     ```sql
     create table employees (
       id integer primary key,
-      name varchar(50)
+      name varchar(50),
+      department varchar(10),
+      salary integer
     );
     ```
 
