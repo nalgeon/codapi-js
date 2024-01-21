@@ -103,6 +103,7 @@ class CodapiSnippet extends HTMLElement {
         }
 
         this.output = this.querySelector("codapi-output");
+        this.output.mode = this.getAttribute("output-mode");
         if (this.hasAttribute("output")) {
             this.fallback = this.extractFallback(this.getAttribute("output"));
         }
@@ -388,7 +389,7 @@ class CodeElement extends EventTarget {
         return this.el.innerText.trim().replace(/[\u00A0]/g, " ");
     }
     set value(val) {
-        this.el.innerHTML = text.sanitize(val);
+        this.el.textContent = val;
     }
 }
 

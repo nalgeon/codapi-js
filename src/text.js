@@ -9,11 +9,4 @@ function cut(s, sep) {
     return [s, ""];
 }
 
-// sanitize strips HTML from the text.
-function sanitize(text) {
-    const div = document.createElement("div");
-    div.innerText = text;
-    return div.innerHTML;
-}
-
-export default { cut, sanitize };
+export default { cut };

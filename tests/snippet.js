@@ -28,8 +28,13 @@ async function runTests() {
     await testCustomSandbox();
     await testCustomCommand();
     await testCustomEvent();
+
     await testFallbackOutput();
     await testHideOutput();
+    await testOutputModeDefault();
+    await testOutputModeText();
+    await testOutputModeSVG();
+    await testOutputModeHTML();
 
     await testTemplate();
     await testFiles();
@@ -179,10 +184,7 @@ async function testRunFailed() {
             t.assert("result.stdout", result.stdout == "");
             t.assert("result.stderr", result.stderr == "syntax error");
             t.assert("status done", ui.status.innerHTML.includes("Failed"));
-            t.assert(
-                "output",
-                ui.output.out.innerText.trim() == "syntax error"
-            );
+            t.assert("output", ui.output.out.innerText.trim() == "syntax error");
             t.unmock(executor.engine, "exec");
             resolve();
         });
@@ -210,10 +212,7 @@ async function testRunError() {
         ui.snip.addEventListener("error", (event) => {
             t.assert("error message", event.detail.message == "request failed");
             t.assert("status error", ui.status.innerHTML.includes("Failed"));
-            t.assert(
-                "output",
-                ui.output.out.innerText.trim() == "request failed"
-            );
+            t.assert("output", ui.output.out.innerText.trim() == "request failed");
             t.unmock(executor.engine, "exec");
             resolve();
         });
@@ -347,7 +346,9 @@ async function testCustomCommand() {
     return new Promise((resolve, reject) => {
         t.log("testCustomCommand...");
         const ui = createSnippet(`
-            <pre><code>print("hello")</code></pre>
+            <pre><code>import unittest
+class Test(unittest.TestCase):
+    def test(self): pass</code></pre>
             <codapi-snippet sandbox="python" actions="Test:test"></codapi-snippet>
         `);
         ui.snip.addEventListener("result", (event) => {
@@ -388,10 +389,7 @@ async function testFallbackOutput() {
         });
         ui.snip.addEventListener("error", (event) => {
             t.assert("error message", event.detail.message == "request failed");
-            t.assert(
-                "status error",
-                ui.status.innerHTML.includes("Failed, using fallback")
-            );
+            t.assert("status error", ui.status.innerHTML.includes("Failed, using fallback"));
             t.assert("output", ui.output.out.innerText.trim() == "hello");
             t.unmock(executor.engine, "exec");
             resolve();
@@ -410,6 +408,70 @@ async function testHideOutput() {
         ui.snip.addEventListener("result", () => {
             ui.output.close.click();
             t.assert("output hidden", ui.output.hasAttribute("hidden"));
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputModeDefault() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputModeDefault...");
+        const ui = createSnippet(`
+            <pre><code>console.log("&lt;em&gt;hello&lt;/em&gt;")</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript"></codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            const result = event.detail;
+            t.assert("output", ui.output.out.innerHTML == "&lt;em&gt;hello&lt;/em&gt;");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputModeText() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputModeText...");
+        const ui = createSnippet(`
+            <pre><code>console.log("&lt;em&gt;hello&lt;/em&gt;")</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript" output-mode="text">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output", ui.output.out.innerHTML == "&lt;em&gt;hello&lt;/em&gt;");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputModeSVG() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputModeSVG...");
+        const ui = createSnippet(`
+            <pre><code>console.log("&lt;svg&gt;hello&lt;/svg&gt;")</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript" output-mode="svg">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output", ui.output.out.innerHTML == "<svg>hello</svg>");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputModeHTML() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputModeHTML...");
+        const ui = createSnippet(`
+            <pre><code>console.log("&lt;em&gt;hello&lt;/em&gt;")</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript" output-mode="html">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output", ui.output.out.innerHTML == "<em>hello</em>");
             resolve();
         });
         ui.toolbar.run.click();
@@ -482,16 +544,10 @@ async function testDependsOn() {
         ui.snip.addEventListener("result", (event) => {
             const result = event.detail;
             t.assert("result.ok", result.ok);
-            t.assert(
-                "result.stdout",
-                result.stdout.trim() == "step-1\nstep-2\nstep-3"
-            );
+            t.assert("result.stdout", result.stdout.trim() == "step-1\nstep-2\nstep-3");
             t.assert("result.stderr", result.stderr == "");
             t.assert("status done", ui.status.innerHTML.includes("Done"));
-            t.assert(
-                "output",
-                ui.output.out.innerText.trim() == "step-1\nstep-2\nstep-3"
-            );
+            t.assert("output", ui.output.out.innerText.trim() == "step-1\nstep-2\nstep-3");
             resolve();
         });
         ui.toolbar.run.click();

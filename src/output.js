@@ -1,11 +1,58 @@
 // An output of an interactive code snippet.
-import text from "./text.js";
+
+// Output modes.
+const OutputMode = {
+    text: "text",
+    svg: "svg",
+    html: "html",
+};
 
 const template = document.createElement("template");
 template.innerHTML = `
 <a href="#close">✕</a>
 <pre><code></code></pre>
 `;
+
+// output builders.
+const builders = {
+    // returns the result as a text node.
+    [OutputMode.text]: (result) => {
+        let html = [];
+        if (result.stdout) {
+            html.push(result.stdout);
+        }
+        if (result.stderr) {
+            html.push(result.stderr);
+        }
+        return document.createTextNode(html.join("\n"));
+    },
+
+    // returns the result as an SVG element.
+    [OutputMode.svg]: (result) => {
+        if (result.stderr) {
+            return document.createTextNode(result.stderr);
+        }
+        const doc = new DOMParser().parseFromString(result.stdout, "image/svg+xml");
+        if (doc.querySelector("parsererror")) {
+            return document.createTextNode(result.stdout);
+        }
+        return doc.documentElement;
+    },
+
+    // returns the result as a document fragment.
+    [OutputMode.html]: (result) => {
+        if (result.stderr) {
+            return document.createTextNode(result.stderr);
+        }
+        const doc = new DOMParser().parseFromString(result.stdout, "text/html");
+        if (doc.querySelector("parsererror")) {
+            return document.createTextNode(result.stdout);
+        }
+        const frag = document.createDocumentFragment();
+        Array.from(doc.body.childNodes).forEach((child) => frag.appendChild(child));
+        return frag;
+    },
+};
 
 // CodapiOutput prints the output of an interactive code snippet.
 class CodapiOutput extends HTMLElement {
@@ -41,14 +88,9 @@ class CodapiOutput extends HTMLElement {
 
     // showResult shows the results of the code execution.
     showResult(result) {
-        let html = [];
-        if (result.stdout) {
-            html.push(text.sanitize(result.stdout));
-        }
-        if (result.stderr) {
-            html.push(text.sanitize(result.stderr));
-        }
-        this.output.innerHTML = html.join("\n");
+        const node = builders[this.mode](result);
+        this.output.innerHTML = "";
+        this.output.appendChild(node);
         this.show();
     }
 
@@ -74,6 +116,17 @@ class CodapiOutput extends HTMLElement {
 
     hide() {
         this.setAttribute("hidden", "");
+    }
+
+    // output mode.
+    get mode() {
+        return this.getAttribute("mode") || OutputMode.text;
+    }
+    set mode(value) {
+        if (!(value in OutputMode)) {
+            value = OutputMode.text;
+        }
+        this.setAttribute("mode", value);
     }
 }
 
