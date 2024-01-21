@@ -18,9 +18,7 @@ async function init(name) {
     const box = boxes[name];
     const bytes = await readFile(box.url);
     programs[name] =
-        box.type == "webc"
-            ? await Wasmer.fromFile(bytes)
-            : await WebAssembly.compile(bytes);
+        box.type == "webc" ? await Wasmer.fromFile(bytes) : await WebAssembly.compile(bytes);
     return programs[name];
 }
 
@@ -88,9 +86,7 @@ function buildArgs(step, req) {
     if (!step.stdin) {
         return step.args;
     }
-    return step.args.map((arg) =>
-        arg == step.entry ? req.files[step.entry] : arg
-    );
+    return step.args.map((arg) => (arg == step.entry ? req.files[step.entry] : arg));
 }
 
 // runProgram executes a WASI binary.

@@ -85,11 +85,7 @@ class CodapiSnippet extends HTMLElement {
     render() {
         this.appendChild(template.content.cloneNode(true));
         const codeEl = this.findCodeElement();
-        this.snippet = new CodeElement(
-            codeEl,
-            this.editor,
-            this.execute.bind(this)
-        );
+        this.snippet = new CodeElement(codeEl, this.editor, this.execute.bind(this));
 
         this.toolbar = this.querySelector("codapi-toolbar");
         const actions = this.getAttribute("actions");
@@ -373,9 +369,7 @@ class CodeElement extends EventTarget {
     onPaste(event) {
         event.preventDefault();
         // get text representation of clipboard
-        const text = (event.originalEvent || event).clipboardData.getData(
-            "text/plain"
-        );
+        const text = (event.originalEvent || event).clipboardData.getData("text/plain");
         // insert text manually
         document.execCommand("insertText", false, text);
     }
@@ -411,9 +405,7 @@ function gatherCode(curSnip) {
         }
         code = snip.code + "\n" + code;
         if (snip.dependsOn) {
-            ids.push(
-                ...snip.dependsOn.split(" ").filter((i) => !ids.includes(i))
-            );
+            ids.push(...snip.dependsOn.split(" ").filter((i) => !ids.includes(i)));
         }
     }
     return code;

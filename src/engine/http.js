@@ -31,8 +31,7 @@ function parse(src) {
 
     // parse method and URL
     const methodUrl = lines[0].split(" ").filter((s) => s);
-    const [method, url] =
-        methodUrl.length >= 2 ? methodUrl : ["GET", methodUrl[0]];
+    const [method, url] = methodUrl.length >= 2 ? methodUrl : ["GET", methodUrl[0]];
     lineIdx += 1;
 
     // parse URL parameters
