@@ -5,6 +5,7 @@ Here is how to embed interactive code snippets into your HTML or Markdown pages:
 -   [Interactive code block](#interactive-code-block)
 -   [Attaching to an element](#attaching-to-a-specific-element)
 -   [Syntax highlighting](#syntax-highlighting-and-rich-editing)
+-   [Output modes](#output-modes)
 -   [Templates](#templates)
 -   [Files](#files)
 -   [Custom actions](#custom-actions)
@@ -101,6 +102,10 @@ To use `codapi-snippet` with code editors like CodeMirror, do the following:
 <codapi-snippet sandbox="python" editor="external" selector="#editor">
 </codapi-snippet>
 ```
+
+## Output modes
+
+The widget supports multiple [output modes](output-modes.md), from plain text to SVG images, HTML fragments, and interactive DOM.
 
 ## Templates
 
