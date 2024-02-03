@@ -8,8 +8,8 @@ Note that WASI-based playgrounds (`engine` = `wasi` in the examples below) requi
 
 ```html
 <script src="https://unpkg.com/@antonz/runno@0.6.1/dist/runno.js"></script>
-<script src="https://unpkg.com/@antonz/codapi@0.12.2/dist/engine/wasi.js"></script>
-<script src="https://unpkg.com/@antonz/codapi@0.12.2/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.13.0/dist/engine/wasi.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.13.0/dist/snippet.js"></script>
 ```
 
 ## JavaScript
