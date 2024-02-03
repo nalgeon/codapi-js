@@ -58,6 +58,16 @@ See the guide that best fits your use case:
 
 You'll also need a working Codapi server, either cloud-based at [codapi.org](https://codapi.org/) or [self-hosted](https://github.com/nalgeon/codapi). Unless you are using an in-browser playground (see below).
 
+## Advanced features
+
+Codapi offers a number of features that go beyond simple code playgrounds:
+
+- [Output modes](docs/output-modes.md) for displaying images, HTML fragments and interactive DOM.
+- [Templates](docs/templates.md) for hiding parts of the code behind the scenes.
+- [Multi-file](docs/files.md) playgrounds.
+- [Custom actions](docs/custom-actions.md).
+- [Code cells](docs/code-cells.md) for a Jupyter notebook-like experience.
+
 ## In-browser playgrounds
 
 Most playgrounds (like Go or PostgreSQL) run code on the Codapi server.
