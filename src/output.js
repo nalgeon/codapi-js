@@ -5,6 +5,8 @@ const OutputMode = {
     text: "text",
     svg: "svg",
     html: "html",
+    dom: "dom",
+    hidden: "hidden",
 };
 
 const template = document.createElement("template");
@@ -52,6 +54,22 @@ const builders = {
         Array.from(doc.body.childNodes).forEach((child) => frag.appendChild(child));
         return frag;
     },
+
+    // treats the result as a DOM node unless it's an error.
+    [OutputMode.dom]: (result) => {
+        if (result.stderr) {
+            return document.createTextNode(result.stderr);
+        }
+        return result.stdout;
+    },
+
+    // hides the result unless it's an error.
+    [OutputMode.hidden]: (result) => {
+        if (result.stderr) {
+            return document.createTextNode(result.stderr);
+        }
+        return null;
+    },
 };
 
 // CodapiOutput prints the output of an interactive code snippet.
@@ -90,6 +108,10 @@ class CodapiOutput extends HTMLElement {
     showResult(result) {
         const node = builders[this.mode](result);
         this.output.innerHTML = "";
+        if (!node) {
+            this.hide();
+            return;
+        }
         this.output.appendChild(node);
         this.show();
     }

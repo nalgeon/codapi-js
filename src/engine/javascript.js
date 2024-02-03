@@ -7,11 +7,13 @@ async function exec(_, data) {
     try {
         const messages = [];
         patchConsole(messages);
-        const elapsed = await execCode(data.files[""]);
+        const [out, elapsed] = await execCode(data.files[""]);
+        // return either the function result or the console log
+        // if the function returned nothing
         return {
             ok: true,
             duration: elapsed,
-            stdout: messages.join("\n"),
+            stdout: out ?? messages.join("\n"),
             stderr: "",
         };
     } catch (exc) {
@@ -30,9 +32,9 @@ async function exec(_, data) {
 async function execCode(code) {
     const func = new AsyncFunction(code);
     const start = new Date();
-    await func();
+    const out = await func();
     const elapsed = new Date() - start;
-    return elapsed;
+    return [out, elapsed];
 }
 
 // patchConsole redirects console logging to an array of messages

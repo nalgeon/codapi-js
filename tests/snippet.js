@@ -31,10 +31,17 @@ async function runTests() {
 
     await testFallbackOutput();
     await testHideOutput();
+
+    await testOutputLog();
+    await testOutputReturn();
+    await testOutputLogAndReturn();
+
     await testOutputModeDefault();
     await testOutputModeText();
     await testOutputModeSVG();
     await testOutputModeHTML();
+    await testOutputModeDOM();
+    await testOutputModeHidden();
 
     await testTemplate();
     await testFiles();
@@ -414,6 +421,54 @@ async function testHideOutput() {
     });
 }
 
+async function testOutputLog() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputLog...");
+        const ui = createSnippet(`
+            <pre><code>console.log("hello")</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output", ui.output.out.innerHTML == "hello");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputReturn() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputReturn...");
+        const ui = createSnippet(`
+            <pre><code>return "hello"</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output", ui.output.out.innerHTML == "hello");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputLogAndReturn() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputLogAndReturn...");
+        const ui = createSnippet(`
+            <pre><code>console.log("hello"); return "goodbye";</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output", ui.output.out.innerHTML == "goodbye");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
 async function testOutputModeDefault() {
     return new Promise((resolve, reject) => {
         t.log("testOutputModeDefault...");
@@ -472,6 +527,41 @@ async function testOutputModeHTML() {
         `);
         ui.snip.addEventListener("result", (event) => {
             t.assert("output", ui.output.out.innerHTML == "<em>hello</em>");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputModeDOM() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputModeDOM...");
+        const ui = createSnippet(`
+            <pre><code>const el = document.createElement("em");
+el.textContent = "hello";
+return el;</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript" output-mode="dom">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output", ui.output.out.innerHTML == "<em>hello</em>");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputModeHidden() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputModeHidden...");
+        const ui = createSnippet(`
+            <pre><code>console.log("hello")</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript" output-mode="hidden">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output empty", ui.output.out.innerHTML == "");
+            t.assert("output hidden", ui.output.hasAttribute("hidden"));
             resolve();
         });
         ui.toolbar.run.click();
