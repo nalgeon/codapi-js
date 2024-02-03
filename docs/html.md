@@ -9,6 +9,7 @@ Here is how to embed interactive code snippets into your HTML or Markdown pages:
 -   [Files](#files)
 -   [Custom actions](#custom-actions)
 -   [Code cells](#code-cells)
+-   [Sandbox version](#sandbox-version)
 -   [Self-hosted server](#self-hosted-server)
 
 ## Interactive code block
@@ -319,6 +320,17 @@ The dependencies do not have to be linear, they can form any (acyclic) graph. Fo
 create ← insert-1 ← select
        ↖ insert-2 ↙
 ```
+
+## Sandbox version
+
+Some sandboxes support multiple versions (e.g. the latest released version and the next beta or release candidate version). By default, the widget uses the `latest` version, but you can change this using the `version` attribute:
+
+```html
+<codapi-snippet sandbox="sqlite:dev" editor="basic">
+</codapi-snippet>
+```
+
+The appropriate version must be enabled on the server.
 
 ## Self-hosted server
 
