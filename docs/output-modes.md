@@ -6,7 +6,6 @@ The widget supports different output modes:
 -   [SVG images](#svg-images)
 -   [HTML fragments](#html-fragments)
 -   [Interactive DOM](#interactive-dom)
--   [Existing DOM elements](#existing-dom-elements)
 
 ## Plain text
 
@@ -15,7 +14,8 @@ By default, the widget displays the printed output as text.
 Widget:
 
 ```html
-<codapi-snippet sandbox="python"></codapi-snippet>
+<codapi-snippet sandbox="python">
+</codapi-snippet>
 ```
 
 Code snippet:
@@ -40,7 +40,8 @@ To display an image, set the `output-mode` attribute to `svg` and print the imag
 Widget:
 
 ```html
-<codapi-snippet sandbox="python" output-mode="svg"></codapi-snippet>
+<codapi-snippet sandbox="python" output-mode="svg">
+</codapi-snippet>
 ```
 
 Code snippet (using `matplotlib`):
@@ -75,7 +76,8 @@ To display HTML content, set the `output-mode` attribute to `html` and print an 
 Widget:
 
 ```html
-<codapi-snippet sandbox="python" output-mode="html"></codapi-snippet>
+<codapi-snippet sandbox="python" output-mode="html">
+</codapi-snippet>
 ```
 
 Code snippet:
@@ -129,44 +131,3 @@ return el;
 Output:
 
 ![Interactive JavaScript](img/chartjs.png)
-
-## Existing DOM elements
-
-You can use an existing DOM element for output. To do so, set the `output-mode` attribute to `hidden` and use an existing DOM node from your code snippet.
-
-Widget:
-
-```html
-<codapi-snippet engine="browser" sandbox="javascript" output-mode="hidden">
-</codapi-snippet>
-```
-
-Code snippet:
-
-```js
-const out = document.querySelector("#output");
-out.innerHTML = "";
-
-const btn = document.createElement("button");
-btn.setAttribute("type", "button");
-btn.innerText = "Greet me!";
-btn.addEventListener("click", (event) => {
-    event.target.parentElement.innerText = "Hello, World!";
-});
-
-out.appendChild(btn);
-```
-
-Output: "Greet me!" button that changes to "Hello, World!" text when clicked.
-
-```
-┌───────────┐
-│ Greet me! │
-└───────────┘
-```
-
-↓ click
-
-```
-Hello, World!
-```
