@@ -25,7 +25,8 @@ Here we add two buttons:
 To make a button trigger an event instead of executing a command, add `@` before the action name:
 
 ```html
-<codapi-snippet sandbox="python" actions="Share:@share"> </codapi-snippet>
+<codapi-snippet sandbox="python" actions="Share:@share">
+</codapi-snippet>
 ```
 
 Here we add a "Share" button, which, when clicked, triggers the `share` event on the `codapi-snippet` element. We can then listen to this event and do something with the code:
