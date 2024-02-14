@@ -1,6 +1,8 @@
-// Codapi snippet automated tests.
+// Codapi snippet tests.
 
-import t from "./testing.js";
+import testing from "./testing.js";
+
+const t = new testing.T("snippet");
 
 async function runTests() {
     t.log("Running tests...");
@@ -50,6 +52,7 @@ async function runTests() {
     await testDependsOn();
 
     t.summary();
+    return t.errorCount;
 }
 
 async function testInit() {
@@ -689,4 +692,4 @@ function createSnippet(html) {
     return { editor, snip, toolbar, status, output };
 }
 
-runTests();
+export default { runTests };

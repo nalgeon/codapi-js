@@ -123,9 +123,9 @@ async function readFile(url) {
 }
 
 // add the engine to the registry
-window.Codapi = window.Codapi || {};
-window.Codapi.engines = {
-    ...window.Codapi.engines,
+window.codapi = window.codapi || {};
+window.codapi.engines = {
+    ...window.codapi.engines,
     ...{ wasi: { init, exec } },
 };
 

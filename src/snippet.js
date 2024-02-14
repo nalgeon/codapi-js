@@ -423,7 +423,6 @@ function delay(func, timeout) {
 }
 
 if (!window.customElements.get("codapi-snippet")) {
-    window.CodapiSnippet = CodapiSnippet;
     customElements.define("codapi-toolbar", CodapiToolbar);
     customElements.define("codapi-status", CodapiStatus);
     customElements.define("codapi-output", CodapiOutput);
