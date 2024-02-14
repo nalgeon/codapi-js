@@ -168,7 +168,7 @@ class CodapiSnippet extends HTMLElement {
     extractFallback(selector) {
         const el = this.findOutputElement(selector);
         const stdoutEl = el.querySelector("code") || el;
-        const stdout = stdoutEl.innerText.trim();
+        const stdout = stdoutEl.textContent.trim();
         el.parentElement.removeChild(el);
         return {
             ok: false,
@@ -203,7 +203,7 @@ class CodapiSnippet extends HTMLElement {
 
     // execute runs the code.
     async execute(command = undefined) {
-        if (!this.code) {
+        if (this.snippet.isEmpty) {
             this.output.showMessage("(empty)");
             return;
         }
@@ -319,16 +319,8 @@ class CodeElement extends EventTarget {
     // for editing for the first time.
     initEditor(event) {
         const code = event.target;
-        if (
-            code.innerHTML.startsWith('<span class="line">') ||
-            code.innerHTML.startsWith('<span style="display:flex')
-        ) {
-            // remove syntax highlighting
-            // remove double line feed
-            code.innerText = code.innerText.replace(/\n\n/g, "\n");
-        } else if (code.innerHTML.includes("</span>")) {
-            // remove syntax highlighting
-            code.innerText = code.innerText;
+        if (code.innerHTML.includes("</span>")) {
+            code.textContent = code.textContent;
         }
         code.removeEventListener("focus", this.onFocus);
         delete this.onFocus;
@@ -383,10 +375,15 @@ class CodeElement extends EventTarget {
         selection.collapseToEnd();
     }
 
+    // isEmpty returns true if the snippet has no code.
+    get isEmpty() {
+        return this.el.textContent.trim() == "";
+    }
+
     // value is the plain text code value.
     get value() {
         // trim and convert non-breaking spaces to normal ones
-        return this.el.innerText.trim().replace(/[\u00A0]/g, " ");
+        return this.el.textContent.trim().replace(/[\u00A0]/g, " ");
     }
     set value(val) {
         this.el.textContent = val;
