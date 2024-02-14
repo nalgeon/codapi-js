@@ -1,5 +1,6 @@
 // Execute code using the Wasmer WASI runtime.
 
+import codobj from "../codobj.js";
 import boxes from "./wasi/boxes.js";
 import commands from "./wasi/commands.js";
 
@@ -123,9 +124,8 @@ async function readFile(url) {
 }
 
 // add the engine to the registry
-window.codapi = window.codapi || {};
-window.codapi.engines = {
-    ...window.codapi.engines,
+codobj.engines = {
+    ...codobj.engines,
     ...{ wasi: { init, exec } },
 };
 

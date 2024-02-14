@@ -1,6 +1,7 @@
 .PHONY: build publish
 
-FLAGS = --bundle --minify --target=es2021
+VERSION = $(shell npm pkg get version --workspaces=false)
+FLAGS = --bundle --minify --target=es2021 --define:VERSION='$(VERSION)'
 
 build:
 	./node_modules/.bin/esbuild src/snippet.js $(FLAGS) --format=iife --outfile=dist/snippet.js

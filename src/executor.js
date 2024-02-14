@@ -1,5 +1,6 @@
 // Execute user code.
 
+import codobj from "./codobj.js";
 import codapi from "./engine/codapi.js";
 import browser from "./engine/browser.js";
 import text from "./text.js";
@@ -22,7 +23,7 @@ class Executor {
 
     // engine returns the engine for the command.
     get engine() {
-        const instance = window.codapi.engines[this.engineName];
+        const instance = codobj.engines[this.engineName];
         if (!instance) {
             throw new Error(`unknown engine: ${this.engineName}`);
         }
@@ -128,7 +129,6 @@ const engines = {
 };
 
 // add engines to the registry
-window.codapi = window.codapi || {};
-window.codapi.engines = { ...window.codapi.engines, ...engines };
+codobj.engines = { ...codobj.engines, ...engines };
 
 export { Executor };

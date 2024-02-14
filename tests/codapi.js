@@ -8,6 +8,7 @@ async function runTests() {
     t.log("Running tests...");
     await testObject();
     await testEngines();
+    await testVersion();
     t.summary();
     return t.errorCount;
 }
@@ -15,6 +16,11 @@ async function runTests() {
 async function testObject() {
     t.log("testObject...");
     t.assert("is not null", typeof window.codapi == "object");
+}
+
+async function testVersion() {
+    t.log("testVersion...");
+    t.assert("equals main", window.codapi.version == "main");
 }
 
 async function testEngines() {
