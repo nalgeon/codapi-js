@@ -8,8 +8,10 @@ async function runTests() {
     await testInit();
     await testInitDelay();
 
-    await testAttach();
     await testAttachPrev();
+    await testAttachParentPrev();
+    await testAttachSelector();
+    await testAttachSelectorPrev();
 
     await testEditorOff();
     await testEditorBasic();
@@ -81,8 +83,36 @@ async function testInitDelay() {
     });
 }
 
-async function testAttach() {
-    t.log("testAttach...");
+async function testAttachPrev() {
+    t.log("testAttachPrev...");
+    const ui = createSnippet(`
+        <div>
+            <div>print("hello")</div>
+        </div>
+        <codapi-snippet sandbox="python"></codapi-snippet>
+    `);
+    t.assertFunc("snippet code", () => {
+        return ui.snip.code == `print("hello")`;
+    });
+}
+
+async function testAttachParentPrev() {
+    t.log("testAttachParentPrev...");
+    const ui = createSnippet(`
+        <div>
+            <div>print("hello")</div>
+        </div>
+        <p>
+            <codapi-snippet sandbox="python"></codapi-snippet>
+        </p>
+    `);
+    t.assertFunc("snippet code", () => {
+        return ui.snip.code == `print("hello")`;
+    });
+}
+
+async function testAttachSelector() {
+    t.log("testAttachSelector...");
     const ui = createSnippet(`
         <div id="playground">
             <pre class="code">print("hello")</pre>
@@ -96,8 +126,8 @@ async function testAttach() {
     });
 }
 
-async function testAttachPrev() {
-    t.log("testAttachPrev...");
+async function testAttachSelectorPrev() {
+    t.log("testAttachSelectorPrev...");
     const ui = createSnippet(`
         <div>
             <div>print("hello")</div>

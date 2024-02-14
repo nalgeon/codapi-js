@@ -143,7 +143,8 @@ class CodapiSnippet extends HTMLElement {
     findCodeElement() {
         if (!this.selector) {
             // search for `code` in the previous sibling
-            const prev = this.previousElementSibling;
+            // if snippet is the only child, use parent's previous sibling
+            const prev = this.previousElementSibling || this.parentElement.previousElementSibling;
             return prev.querySelector("code") || prev;
         }
 
@@ -181,7 +182,9 @@ class CodapiSnippet extends HTMLElement {
     // findOutputElement returns the element containing the default code output.
     findOutputElement(selector) {
         if (!selector) {
-            return this.nextElementSibling;
+            // return the next sibling
+            // if snippet is the only child, return parent's next sibling
+            return this.nextElementSibling || this.parentElement.nextElementSibling;
         }
 
         let el;
