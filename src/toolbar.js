@@ -100,4 +100,8 @@ class CodapiToolbar extends HTMLElement {
     }
 }
 
+if (!window.customElements.get("codapi-toolbar")) {
+    customElements.define("codapi-toolbar", CodapiToolbar);
+}
+
 export { CodapiToolbar };

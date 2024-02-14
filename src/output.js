@@ -152,4 +152,8 @@ class CodapiOutput extends HTMLElement {
     }
 }
 
+if (!window.customElements.get("codapi-output")) {
+    customElements.define("codapi-output", CodapiOutput);
+}
+
 export { CodapiOutput };

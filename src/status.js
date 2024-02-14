@@ -37,4 +37,8 @@ class CodapiStatus extends HTMLElement {
     }
 }
 
+if (!window.customElements.get("codapi-status")) {
+    customElements.define("codapi-status", CodapiStatus);
+}
+
 export { CodapiStatus };
