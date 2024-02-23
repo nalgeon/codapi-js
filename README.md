@@ -37,13 +37,13 @@ npm install @antonz/codapi
 Or use a CDN:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi@0.14.0/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.js"></script>
 ```
 
 Optional styles:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.14.0/dist/snippet.css" />
+<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.css" />
 ```
 
 ## Usage
@@ -63,15 +63,15 @@ You'll also need a working Codapi server, either cloud-based at [codapi.org](htt
 
 Codapi offers a number of features that go beyond simple code playgrounds:
 
-- [Output modes](docs/output-modes.md) for displaying images, HTML fragments and interactive DOM.
-- [Templates](docs/templates.md) for hiding parts of the code behind the scenes.
-- [Multi-file](docs/files.md) playgrounds.
-- [Custom actions](docs/custom-actions.md).
-- [Code cells](docs/code-cells.md) for a Jupyter notebook-like experience.
+-   [Output modes](docs/output-modes.md) for displaying images, HTML fragments and interactive DOM.
+-   [Templates](docs/templates.md) for hiding parts of the code behind the scenes.
+-   [Multi-file](docs/files.md) playgrounds.
+-   [Custom actions](docs/custom-actions.md).
+-   [Code cells](docs/code-cells.md) for a Jupyter notebook-like experience.
 
 ## In-browser playgrounds
 
-Most playgrounds (like Go or PostgreSQL) run code on the Codapi server.
+Most playgrounds (like Go or MongoDB) run code on the Codapi server.
 
 But there are some playgrounds that work completely in the browser, no Codapi server required:
 
@@ -79,6 +79,7 @@ But there are some playgrounds that work completely in the browser, no Codapi se
 -   [Fetch](docs/browser-only.md#fetch)
 -   [Lua](docs/browser-only.md#lua)
 -   [PHP](docs/browser-only.md#php)
+-   [PostgreSQL](docs/browser-only.md#postgresql)
 -   [Python](docs/browser-only.md#python)
 -   [Ruby](docs/browser-only.md#ruby)
 -   [SQLite](docs/browser-only.md#sqlite)

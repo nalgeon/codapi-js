@@ -2,10 +2,11 @@
 
 The widget supports different output modes:
 
--   [Plain text](#plain-text)
--   [SVG images](#svg-images)
--   [HTML fragments](#html-fragments)
--   [Interactive DOM](#interactive-dom)
+[Plain text](#plain-text) •
+[JSON table](#json-table) •
+[SVG images](#svg-images) •
+[HTML fragments](#html-fragments) •
+[Interactive DOM](#interactive-dom)
 
 ## Plain text
 
@@ -32,6 +33,38 @@ Output:
 ```
 Hello, World!
 ```
+
+## JSON table
+
+To display a JSON array as a table, set the `output-mode` attribute to `table` and print the JSON array as a string from your code snippet.
+
+Widget:
+
+```html
+<codapi-snippet sandbox="python" output-mode="table">
+</codapi-snippet>
+```
+
+Code snippet:
+
+```python
+import json
+
+data = [
+    {"id": 11, "name": "Alice"},
+    {"id": 12, "name": "Bob"},
+    {"id": 13, "name": "Cindy"},
+]
+print(json.dumps(data))
+```
+
+Output:
+
+| id  | name  |
+| --- | ----- |
+| 11  | Alice |
+| 12  | Bob   |
+| 13  | Cindy |
 
 ## SVG images
 

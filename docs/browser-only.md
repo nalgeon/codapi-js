@@ -1,6 +1,6 @@
 # In-browser playgrounds
 
-Most playgrounds (like Go or PostgreSQL) run code on the Codapi server.
+Most playgrounds (like Go or MongoDB) run code on the Codapi server.
 
 But there are some playgrounds that work completely in the browser, no Codapi server required.
 
@@ -8,8 +8,8 @@ Note that WASI-based playgrounds (`engine` = `wasi` in the examples below) requi
 
 ```html
 <script src="https://unpkg.com/@antonz/runno@0.6.1/dist/runno.js"></script>
-<script src="https://unpkg.com/@antonz/codapi@0.14.0/dist/engine/wasi.js"></script>
-<script src="https://unpkg.com/@antonz/codapi@0.14.0/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.15.0/dist/engine/wasi.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.js"></script>
 ```
 
 ## JavaScript
@@ -77,6 +77,33 @@ echo $msg;
 ```
 
 [Try it](https://codapi.org/php-wasi/)
+
+## PostgreSQL
+
+Executes the code using the [PGlite runtime](https://github.com/electric-sql/pglite) (12 MB).
+
+```html
+<pre>
+create table data(message text);
+insert into data values ('Hello, World!');
+select * from data;
+</pre>
+
+<codapi-snippet engine="pglite" sandbox="postgres" editor="basic"></codapi-snippet>
+```
+
+[Try it](https://codapi.org/postgres-pglite/)
+
+Note that this playground requires additional scripts besides the usual `snippet.js`:
+
+```html
+<script type="module">
+    import { PGlite } from "https://cdn.jsdelivr.net/npm/@electric-sql/pglite/dist/index.js";
+    window.PGlite = PGlite;
+</script>
+<script src="https://unpkg.com/@antonz/codapi@0.15.0/dist/engine/pglite.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.js"></script>
+```
 
 ## Python
 
