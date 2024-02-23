@@ -42,6 +42,7 @@ async function runTests() {
 
     await testOutputModeDefault();
     await testOutputModeText();
+    await testOutputModeTable();
     await testOutputModeSVG();
     await testOutputModeHTML();
     await testOutputModeDOM();
@@ -528,6 +529,26 @@ async function testOutputModeText() {
         `);
         ui.snip.addEventListener("result", (event) => {
             t.assert("output", ui.output.out.innerHTML == "&lt;em&gt;hello&lt;/em&gt;");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputModeTable() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputModeTable...");
+        const ui = createSnippet(`
+            <pre><code>console.log('[{"a":11},{"a":12}]')</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript" output-mode="table">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert(
+                "output",
+                ui.output.out.innerHTML ==
+                    "<table><thead><tr><th>a</th></tr></thead><tbody><tr><td>11</td></tr><tr><td>12</td></tr></tbody></table>"
+            );
             resolve();
         });
         ui.toolbar.run.click();

@@ -1,8 +1,11 @@
 // An output of an interactive code snippet.
 
+import json from "./json.js";
+
 // Output modes.
 const OutputMode = {
     text: "text",
+    table: "table",
     svg: "svg",
     html: "html",
     dom: "dom",
@@ -27,6 +30,17 @@ const builders = {
             html.push(result.stderr);
         }
         return document.createTextNode(html.join("\n"));
+    },
+
+    // returns the result as an HTML table.
+    // result.stdout should be a JSON array or a serialized JSON array
+    [OutputMode.table]: (result) => {
+        if (result.stderr) {
+            return document.createTextNode(result.stderr);
+        }
+        const data = typeof result.stdout == "object" ? result.stdout : JSON.parse(result.stdout);
+        const table = json.asTable(data);
+        return table;
     },
 
     // returns the result as an SVG element.
