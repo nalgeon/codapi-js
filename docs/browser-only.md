@@ -89,7 +89,8 @@ insert into data values ('Hello, World!');
 select * from data;
 </pre>
 
-<codapi-snippet engine="pglite" sandbox="postgres" editor="basic"></codapi-snippet>
+<codapi-snippet engine="pglite" sandbox="postgres" editor="basic" output-mode="table">
+</codapi-snippet>
 ```
 
 [Try it](https://codapi.org/postgres-pglite/)
