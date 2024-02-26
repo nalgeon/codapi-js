@@ -37,13 +37,13 @@ npm install @antonz/codapi
 Or use a CDN:
 
 ```html
-<script src="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.js"></script>
+<script src="https://unpkg.com/@antonz/codapi@0.16.0/dist/snippet.js"></script>
 ```
 
 Optional styles:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.css" />
+<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.16.0/dist/snippet.css" />
 ```
 
 ## Usage

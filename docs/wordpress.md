@@ -34,8 +34,8 @@ Note two properties here:
 Finally, at the bottom of the page, add another _Custom HTML_ block with Codapi script and styling (you will only need one such block no matter how many snippets you put on a page):
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.css" />
-<script src="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.16.0/dist/snippet.css" />
+<script src="https://unpkg.com/@antonz/codapi@0.16.0/dist/snippet.js"></script>
 ```
 
 And that's it! The `codapi-snippet` automatically attaches itself to the preceding _Code_ block, allowing you to run and edit the code. It looks like this:
@@ -73,8 +73,8 @@ Immediately below it, add a _Custom HTML_ block with the following content (note
 Finally, at the bottom of the page, add another _Custom HTML_ block with Codapi script and styling (do this only if you haven't already added it):
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.css" />
-<script src="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.16.0/dist/snippet.css" />
+<script src="https://unpkg.com/@antonz/codapi@0.16.0/dist/snippet.js"></script>
 ```
 
 And here comes your interactive code snippet with syntax highlighting!
@@ -144,8 +144,8 @@ Note the `template` attribute here, which refers to the `main.sql` we added earl
 Finally, at the bottom of the page, add another _Custom HTML_ block with Codapi script and styling (do this only if you haven't already added it):
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.css" />
-<script src="https://unpkg.com/@antonz/codapi@0.15.0/dist/snippet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.16.0/dist/snippet.css" />
+<script src="https://unpkg.com/@antonz/codapi@0.16.0/dist/snippet.js"></script>
 ```
 
 And here comes your interactive SQL snippet!
