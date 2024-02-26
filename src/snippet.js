@@ -181,7 +181,7 @@ class CodapiSnippet extends HTMLElement {
 
     // findOutputElement returns the element containing the default code output.
     findOutputElement(selector) {
-        if (!selector) {
+        if (!selector || selector == "@next") {
             // return the next sibling
             // if snippet is the only child, return parent's next sibling
             return this.nextElementSibling || this.parentElement.nextElementSibling;
@@ -191,8 +191,8 @@ class CodapiSnippet extends HTMLElement {
         if (selector.startsWith("@next")) {
             // search for selector in the next sibling
             const next = this.nextElementSibling;
-            const [_, selector] = text.cut(selector, " ");
-            el = next.querySelector(selector);
+            const [_, elSelector] = text.cut(selector, " ");
+            el = next.querySelector(elSelector);
         } else {
             // search for selector globally
             el = document.querySelector(selector);

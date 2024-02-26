@@ -34,6 +34,10 @@ async function runTests() {
     await testCustomEvent();
 
     await testFallbackOutput();
+    await testFallbackOutputNext();
+    await testFallbackOutputNextChild();
+    await testFallbackOutputSelector();
+
     await testHideOutput();
 
     await testOutputLog();
@@ -431,6 +435,70 @@ async function testFallbackOutput() {
         ui.snip.addEventListener("error", (event) => {
             t.assert("error message", event.detail.message == "request failed");
             t.assert("status error", ui.status.innerHTML.includes("Failed, using fallback"));
+            t.assert("output", ui.output.out.innerText.trim() == "hello");
+            t.unmock(executor.engine, "exec");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testFallbackOutputNext() {
+    return new Promise((resolve, reject) => {
+        t.log("testFallbackOutputNext...");
+        const ui = createSnippet(`
+            <pre><code>print("hello")</code></pre>
+            <codapi-snippet sandbox="python" output="@next"></codapi-snippet>
+            <pre>hello</pre>
+        `);
+        const { executor } = ui.snip;
+        t.mock(executor.engine, "exec", () => {
+            throw new Error("request failed");
+        });
+        ui.snip.addEventListener("error", (event) => {
+            t.assert("output", ui.output.out.innerText.trim() == "hello");
+            t.unmock(executor.engine, "exec");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testFallbackOutputNextChild() {
+    return new Promise((resolve, reject) => {
+        t.log("testFallbackOutputNextChild...");
+        const ui = createSnippet(`
+            <pre><code>print("hello")</code></pre>
+            <codapi-snippet sandbox="python" output="@next pre"></codapi-snippet>
+            <div><pre>hello</pre></div>
+        `);
+        const { executor } = ui.snip;
+        t.mock(executor.engine, "exec", () => {
+            throw new Error("request failed");
+        });
+        ui.snip.addEventListener("error", (event) => {
+            t.assert("output", ui.output.out.innerText.trim() == "hello");
+            t.unmock(executor.engine, "exec");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testFallbackOutputSelector() {
+    return new Promise((resolve, reject) => {
+        t.log("testFallbackOutputSelector...");
+        const ui = createSnippet(`
+            <pre><code>print("hello")</code></pre>
+            <codapi-snippet sandbox="python" output="#output"></codapi-snippet>
+            <p>other element</p>
+            <div><pre id="output">hello</pre></div>
+        `);
+        const { executor } = ui.snip;
+        t.mock(executor.engine, "exec", () => {
+            throw new Error("request failed");
+        });
+        ui.snip.addEventListener("error", (event) => {
             t.assert("output", ui.output.out.innerText.trim() == "hello");
             t.unmock(executor.engine, "exec");
             resolve();
