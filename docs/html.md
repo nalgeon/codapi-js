@@ -11,7 +11,7 @@ Here is how to embed interactive code snippets into your HTML or Markdown pages:
 -   [Custom actions](#custom-actions)
 -   [Code cells](#code-cells)
 -   [Sandbox version](#sandbox-version)
--   [Self-hosted server](#self-hosted-server)
+-   [Global settings](#global-settings)
 
 ## Interactive code block
 
@@ -134,13 +134,41 @@ Some sandboxes support multiple versions (e.g. the latest released version and t
 
 The appropriate version must be enabled on the server.
 
-## Self-hosted server
+## Global settings
 
-If you are using a self-hosted [codapi server](https://github.com/nalgeon/codapi), point the widget to it using the `url` attribute:
+To change the Codapi settings, use the `codapi-settings` element. First, load it from the CDN:
 
 ```html
-<codapi-snippet sandbox="python" url="http://localhost:1313/v1">
-</codapi-snippet>
+<script src="https://unpkg.com/@antonz/codapi@0.15.0/dist/settings.js"></script>
+```
+
+Then use it like this:
+
+```html
+<codapi-settings prop1="value1" prop2="value2"... propN="valueN">
+</codapi-settings>
+```
+
+Or import the `codapi` object and set the settings in the code:
+
+```js
+import { codobj } '@antonz/codapi/dist/settings.mjs';
+
+codobj.settings.prop1 = "value1";
+codobj.settings.prop2 = "value2";
+// ...
+codobj.settings.propN = "valueN";
+```
+
+See the list of available settings below.
+
+### Self-hosted server
+
+If you are using a self-hosted [codapi server](https://github.com/nalgeon/codapi), point the widget to it using the `url` setting:
+
+```html
+<codapi-settings url="http://localhost:1313/v1">
+</codapi-settings>
 ```
 
 Specify the protocol (`http`/`https`) and hostname or IP like this:

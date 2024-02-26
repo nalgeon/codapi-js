@@ -1,6 +1,6 @@
 // Execute code using the Wasmer WASI runtime.
 
-import codobj from "../codobj.js";
+import { codobj } from "../codobj.js";
 import boxes from "./wasi/boxes.js";
 import commands from "./wasi/commands.js";
 
@@ -24,7 +24,7 @@ async function init(name) {
 }
 
 // exec executes a specific command using a WASI binary.
-async function exec(_, req) {
+async function exec(req) {
     try {
         let output, elapsed;
         const cmd = getCommand(req);

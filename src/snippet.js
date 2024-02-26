@@ -65,7 +65,6 @@ class CodapiSnippet extends HTMLElement {
             engine: this.getAttribute("engine"),
             sandbox: this.getAttribute("sandbox"),
             command: this.getAttribute("command"),
-            url: this.getAttribute("url"),
             template: this.getAttribute("template"),
             files: filesStr ? filesStr.split(" ") : null,
         });

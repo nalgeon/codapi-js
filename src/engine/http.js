@@ -3,10 +3,9 @@ import { fetchTimeout } from "../http.js";
 import text from "../text.js";
 
 // exec sends an HTTP request according to the specification.
-async function exec(url, data) {
+async function exec(data) {
     try {
         const spec = parse(data.files[""]);
-        spec.url = enforceUrl(spec.url, url);
         const [message, elapsed] = await execCode(spec);
         return {
             ok: true,
@@ -67,21 +66,6 @@ function parse(src) {
         headers,
         body,
     };
-}
-
-// enforceUrl enforces the base url (if any).
-function enforceUrl(uri, baseUri) {
-    if (!baseUri) {
-        return uri;
-    }
-    const url = new URL(uri);
-    const baseUrl = new URL(baseUri);
-    url.protocol = baseUrl.protocol;
-    url.username = baseUrl.username;
-    url.password = baseUrl.password;
-    url.host = baseUrl.host;
-    url.pathname = baseUrl.pathname;
-    return url.href;
 }
 
 // execCode sends an HTTP request according to the spec

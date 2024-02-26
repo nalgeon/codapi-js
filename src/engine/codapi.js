@@ -1,4 +1,5 @@
 // Execute code using the Codapi sandbox server.
+import { codobj } from "../codobj.js";
 import { fetchTimeout } from "../http.js";
 
 const defaultUrl = "https://api.codapi.org/v1";
@@ -14,9 +15,9 @@ const errors = {
 
 // exec executes a specific command
 // using a sandbox server API.
-async function exec(apiUrl, data) {
+async function exec(data) {
     try {
-        const url = `${apiUrl || defaultUrl}/exec`;
+        const url = `${codobj.settings.url || defaultUrl}/exec`;
         const resp = await fetchTimeout(url, {
             method: "POST",
             headers: {
@@ -38,7 +39,7 @@ async function exec(apiUrl, data) {
     } catch (exc) {
         // Network or server failure. Not returning the result object,
         // as we should handle such errors differently (e.g. show fallback)
-        throw new Error(`request to ${apiUrl} failed`, { cause: exc });
+        throw new Error(`request failed`, { cause: exc });
     }
 }
 

@@ -3,7 +3,7 @@
 const AsyncFunction = async function () {}.constructor;
 
 // execJs executes JavaScript code using the browser engine.
-async function exec(_, data) {
+async function exec(data) {
     try {
         const messages = [];
         patchConsole(messages);

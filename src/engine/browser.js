@@ -10,10 +10,10 @@ const executors = {
 };
 
 // exec executes a specific command using the appropriate browser API.
-async function exec(url, req) {
+async function exec(req) {
     try {
         const executor = getExecutor(req);
-        return executor(url, req);
+        return executor(req);
     } catch (exc) {
         return {
             ok: false,

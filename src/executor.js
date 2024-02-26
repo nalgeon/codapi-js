@@ -1,6 +1,6 @@
 // Execute user code.
 
-import codobj from "./codobj.js";
+import { codobj } from "./codobj.js";
 import codapi from "./engine/codapi.js";
 import browser from "./engine/browser.js";
 import text from "./text.js";
@@ -10,13 +10,12 @@ const defaultCommand = "run";
 
 // Executor runs the code and shows the results.
 class Executor {
-    constructor({ engine, sandbox, command, url, template, files }) {
+    constructor({ engine, sandbox, command, template, files }) {
         const [sandboxName, version] = text.cut(sandbox, ":");
         this.engineName = engine || defaultEngine;
         this.sandbox = sandboxName;
         this.version = version;
         this.command = command || defaultCommand;
-        this.url = url;
         this.template = template;
         this.files = files;
     }
@@ -34,7 +33,7 @@ class Executor {
     async execute(command, code) {
         code = await this.prepare(code);
         const files = await this.loadFiles();
-        const result = await this.engine.exec(this.url, {
+        const result = await this.engine.exec({
             sandbox: this.sandbox,
             version: this.version,
             command: command || this.command,

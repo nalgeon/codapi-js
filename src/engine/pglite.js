@@ -1,6 +1,6 @@
 // Execute code using PGlite.
 
-import codobj from "../codobj.js";
+import { codobj } from "../codobj.js";
 
 const { PGlite } = window;
 let db;
@@ -14,7 +14,7 @@ async function init() {
 }
 
 // exec executes a query command using PGlite.
-async function exec(_, req) {
+async function exec(req) {
     try {
         const db = await init();
         const start = new Date();
