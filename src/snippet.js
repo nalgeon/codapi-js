@@ -254,10 +254,16 @@ class CodapiSnippet extends HTMLElement {
     get selector() {
         return this.getAttribute("selector");
     }
+    set selector(value) {
+        this.setAttribute("selector", value);
+    }
 
     // editor is the editor mode.
     get editor() {
         return this.getAttribute("editor") || Editor.off;
+    }
+    set editor(value) {
+        this.setAttribute("editor", value);
     }
 
     // code is the plain text code value.
