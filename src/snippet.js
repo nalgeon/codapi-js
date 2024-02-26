@@ -2,9 +2,9 @@
 
 const TAB_WIDTH = 4;
 
-import { CodapiToolbar } from "./toolbar.js";
-import { CodapiStatus } from "./status.js";
-import { CodapiOutput } from "./output.js";
+import "./toolbar.js";
+import "./status.js";
+import "./output.js";
 import { Executor } from "./executor.js";
 import text from "./text.js";
 
@@ -44,10 +44,10 @@ class CodapiSnippet extends HTMLElement {
         this.executor = null;
 
         // ui
-        this.snippet = null;
-        this.toolbar = null;
-        this.output = null;
-        this.fallback = null;
+        this._snippet = null;
+        this._toolbar = null;
+        this._output = null;
+        this._fallback = null;
     }
 
     connectedCallback() {
@@ -87,11 +87,11 @@ class CodapiSnippet extends HTMLElement {
         const codeEl = this.findCodeElement();
         this.snippet = new CodeElement(codeEl, this.editor, this.execute.bind(this));
 
-        this.toolbar = this.querySelector("codapi-toolbar");
+        this._toolbar = this.querySelector("codapi-toolbar");
         const actions = this.getAttribute("actions");
-        this.toolbar.addActions(actions ? actions.split(" ") : null);
+        this._toolbar.addActions(actions ? actions.split(" ") : null);
 
-        const status = this.toolbar.querySelector("codapi-status");
+        const status = this._toolbar.querySelector("codapi-status");
         if (this.hasAttribute("status-running")) {
             status.setAttribute("running", this.getAttribute("status-running"));
         }
@@ -102,40 +102,40 @@ class CodapiSnippet extends HTMLElement {
             status.setAttribute("done", this.getAttribute("status-done"));
         }
 
-        this.output = this.querySelector("codapi-output");
-        this.output.mode = this.getAttribute("output-mode");
+        this._output = this.querySelector("codapi-output");
+        this._output.mode = this.getAttribute("output-mode");
         if (this.hasAttribute("output")) {
-            this.fallback = this.extractFallback(this.getAttribute("output"));
+            this._fallback = this.extractFallback(this.getAttribute("output"));
         }
     }
 
     // listen allows running and editing the code.
     listen() {
         // run button
-        this.toolbar.addEventListener("run", (e) => {
+        this._toolbar.addEventListener("run", (e) => {
             this.execute();
         });
 
         // custom toolbar buttons
-        this.toolbar.addEventListener("command", (e) => {
+        this._toolbar.addEventListener("command", (e) => {
             this.execute(e.detail);
         });
-        this.toolbar.addEventListener("event", (e) => {
+        this._toolbar.addEventListener("event", (e) => {
             this.dispatchEvent(new Event(e.detail));
         });
 
         // editing
         if (this.editor == Editor.basic) {
             // show the 'edit' link
-            this.toolbar.editable = true;
-            this.toolbar.addEventListener("edit", (e) => {
+            this._toolbar.editable = true;
+            this._toolbar.addEventListener("edit", (e) => {
                 this.snippet.focusEnd();
             });
         }
 
         // hide output
         this.snippet.addEventListener("hide", (e) => {
-            this.output.hide();
+            this._output.hide();
         });
     }
 
@@ -207,7 +207,7 @@ class CodapiSnippet extends HTMLElement {
     // execute runs the code.
     async execute(command = undefined) {
         if (this.snippet.isEmpty) {
-            this.output.showMessage("(empty)");
+            this._output.showMessage("(empty)");
             return;
         }
 
@@ -216,38 +216,38 @@ class CodapiSnippet extends HTMLElement {
             const code = gatherCode(this);
             this.dispatchEvent(new CustomEvent("execute", { detail: code }));
             this.state = State.running;
-            this.toolbar.showRunning();
-            this.output.fadeOut();
+            this._toolbar.showRunning();
+            this._output.fadeOut();
 
             // execute code
             const result = await this.executor.execute(command, code);
 
             // show results
             this.state = result.ok ? State.succeded : State.failed;
-            this.toolbar.showFinished(result);
-            this.output.showResult(result);
+            this._toolbar.showFinished(result);
+            this._output.showResult(result);
             this.dispatchEvent(new CustomEvent("result", { detail: result }));
         } catch (exc) {
-            if (this.fallback) {
+            if (this._fallback) {
                 // show fallback results
-                this.toolbar.showStatus(messages.fallback);
-                this.output.showResult(this.fallback);
+                this._toolbar.showStatus(messages.fallback);
+                this._output.showResult(this._fallback);
             } else {
                 // show error
-                this.toolbar.showFinished({});
-                this.output.showMessage(exc.message);
+                this._toolbar.showFinished({});
+                this._output.showMessage(exc.message);
             }
             console.error(exc);
             this.state = State.failed;
             this.dispatchEvent(new CustomEvent("error", { detail: exc }));
         } finally {
-            this.output.fadeIn();
+            this._output.fadeIn();
         }
     }
 
     // showStatus shows a custom message in the status bar.
     showStatus(message) {
-        this.toolbar.showStatus(message);
+        this._toolbar.showStatus(message);
     }
 
     // selector is the code element css selector.
