@@ -28,7 +28,7 @@ class CodapiStatus extends HTMLElement {
         message = message.replace("$DURATION", result.duration);
         this.innerHTML = `
             ${message}
-            <span data-ref>• <a href="https://codapi.org/">codapi</a></span>`;
+            <codapi-ref>by <a href="https://codapi.org/">codapi</a></codapi-ref>`;
     }
 
     // showMessage shows a custom message.
