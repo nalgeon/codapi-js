@@ -53,7 +53,12 @@ async function runTests() {
     await testOutputModeHidden();
 
     await testTemplate();
-    await testFiles();
+
+    await testFilesSnippet();
+    await testFilesScript();
+    await testFilesPre();
+    await testFilesTargetPath();
+
     await testDependsOn();
 
     t.summary();
@@ -713,15 +718,45 @@ function say(msg) {
     });
 }
 
-async function testFiles() {
+async function testFilesSnippet() {
     return new Promise((resolve, reject) => {
-        t.log("testFiles...");
+        t.log("testFilesSnippet...");
+        const ui = createSnippet(`
+<pre><code>
+def say(msg):
+    print(msg)
+</code></pre>
+<codapi-snippet id="talker.py" sandbox="python"></codapi-snippet>
+<pre><code>
+import talker
+talker.say("saying hello")
+</code></pre>
+<codapi-snippet sandbox="python" files="#talker.py"></codapi-snippet>
+        `);
+        const { executor } = ui.snip;
+        t.mock(executor.engine, "exec", (data) => {
+            return { ok: true, stdout: data, stderr: "" };
+        });
+        ui.snip.addEventListener("result", (event) => {
+            const result = event.detail;
+            t.assert(
+                "talker.py",
+                result.stdout.files["talker.py"] == "def say(msg):\n    print(msg)"
+            );
+            t.unmock(executor.engine, "exec");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testFilesScript() {
+    return new Promise((resolve, reject) => {
+        t.log("testFilesScript...");
         const ui = createSnippet(`
 <script id="talker.py" type="text/plain">
 def say(msg):
     print(msg)
-
-##CODE##
 </script>
 <pre><code>
 import talker
@@ -729,9 +764,80 @@ talker.say("saying hello")
 </code></pre>
 <codapi-snippet sandbox="python" files="#talker.py"></codapi-snippet>
         `);
+        const { executor } = ui.snip;
+        t.mock(executor.engine, "exec", (data) => {
+            return { ok: true, stdout: data, stderr: "" };
+        });
         ui.snip.addEventListener("result", (event) => {
             const result = event.detail;
-            t.assert("result.stdout", result.stdout.trim() == "saying hello");
+            console.log("files script", result.stdout.files["talker.py"]);
+            t.assert(
+                "talker.py",
+                result.stdout.files["talker.py"] == "def say(msg):\n    print(msg)"
+            );
+            t.unmock(executor.engine, "exec");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testFilesPre() {
+    return new Promise((resolve, reject) => {
+        t.log("testFilesPre...");
+        const ui = createSnippet(`
+<pre id="talker.py"><code>
+def say(msg):
+    print(msg)
+</code></pre>
+<pre><code>
+import talker
+talker.say("saying hello")
+</code></pre>
+<codapi-snippet sandbox="python" files="#talker.py"></codapi-snippet>
+        `);
+        const { executor } = ui.snip;
+        t.mock(executor.engine, "exec", (data) => {
+            return { ok: true, stdout: data, stderr: "" };
+        });
+        ui.snip.addEventListener("result", (event) => {
+            const result = event.detail;
+            t.assert(
+                "talker.py",
+                result.stdout.files["talker.py"] == "def say(msg):\n    print(msg)"
+            );
+            t.unmock(executor.engine, "exec");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testFilesTargetPath() {
+    return new Promise((resolve, reject) => {
+        t.log("testFilesTargetPath...");
+        const ui = createSnippet(`
+<script id="talker.py" type="text/plain">
+def say(msg):
+    print(msg)
+</script>
+<pre><code>
+import chatty
+chatty.say("saying hello")
+</code></pre>
+<codapi-snippet sandbox="python" files="#talker.py:chatty.py"></codapi-snippet>
+        `);
+        const { executor } = ui.snip;
+        t.mock(executor.engine, "exec", (data) => {
+            return { ok: true, stdout: data, stderr: "" };
+        });
+        ui.snip.addEventListener("result", (event) => {
+            const result = event.detail;
+            t.assert(
+                "chatty.py",
+                result.stdout.files["chatty.py"] == "def say(msg):\n    print(msg)"
+            );
+            t.unmock(executor.engine, "exec");
             resolve();
         });
         ui.toolbar.run.click();

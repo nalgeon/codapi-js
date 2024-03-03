@@ -51,7 +51,7 @@ class T {
     // summary prints the test summary.
     summary() {
         if (this.errorCount) {
-            this.log(`✘ FAILED with ${engine.errorCount} errors`);
+            this.log(`✘ FAILED with ${this.errorCount} errors`);
         } else {
             this.log(`✔ All tests passed`);
         }

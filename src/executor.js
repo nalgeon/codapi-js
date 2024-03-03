@@ -63,24 +63,28 @@ class Executor {
         }
         const files = {};
         for (let path of this.files) {
-            const [name, file] = await readFile(path, encodeResponse);
-            files[name] = file;
+            // srcPath is where to read the file locally
+            // targetPath is where to write the file in the sandbox (optional)
+            const [srcPath, targetPath] = text.cut(path, ":");
+            const [name, file] = await readFile(srcPath, encodeResponse);
+            files[targetPath || name] = file;
         }
         return files;
     }
 }
 
-// readFile loads file content from either a `script` element
+// readFile loads file content from either a DOM element
 // or an external file and returns its serialized value.
 async function readFile(path, encodeFunc) {
     if (path[0] == "#") {
-        // get `script` by id and return its content
+        // get DOM element by id and return its content
         const name = path.slice(1);
         const el = document.getElementById(name);
         if (!el) {
             throw new Error(`element ${path} not found`);
         }
-        return [name, el.text];
+        const text = el.code || el.textContent.trim();
+        return [name, text];
     }
     // read external file
     const name = path.split("/").pop();
