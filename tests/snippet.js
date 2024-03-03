@@ -735,13 +735,13 @@ talker.say("saying hello")
         `);
         const { executor } = ui.snip;
         t.mock(executor.engine, "exec", (data) => {
-            return { ok: true, stdout: data, stderr: "" };
+            return { ok: true, stdout: "ok", stderr: "", request: data };
         });
         ui.snip.addEventListener("result", (event) => {
             const result = event.detail;
             t.assert(
                 "talker.py",
-                result.stdout.files["talker.py"] == "def say(msg):\n    print(msg)"
+                result.request.files["talker.py"] == "def say(msg):\n    print(msg)"
             );
             t.unmock(executor.engine, "exec");
             resolve();
@@ -766,14 +766,13 @@ talker.say("saying hello")
         `);
         const { executor } = ui.snip;
         t.mock(executor.engine, "exec", (data) => {
-            return { ok: true, stdout: data, stderr: "" };
+            return { ok: true, stdout: "ok", stderr: "", request: data };
         });
         ui.snip.addEventListener("result", (event) => {
             const result = event.detail;
-            console.log("files script", result.stdout.files["talker.py"]);
             t.assert(
                 "talker.py",
-                result.stdout.files["talker.py"] == "def say(msg):\n    print(msg)"
+                result.request.files["talker.py"] == "def say(msg):\n    print(msg)"
             );
             t.unmock(executor.engine, "exec");
             resolve();
@@ -798,13 +797,13 @@ talker.say("saying hello")
         `);
         const { executor } = ui.snip;
         t.mock(executor.engine, "exec", (data) => {
-            return { ok: true, stdout: data, stderr: "" };
+            return { ok: true, stdout: "ok", stderr: "", request: data };
         });
         ui.snip.addEventListener("result", (event) => {
             const result = event.detail;
             t.assert(
                 "talker.py",
-                result.stdout.files["talker.py"] == "def say(msg):\n    print(msg)"
+                result.request.files["talker.py"] == "def say(msg):\n    print(msg)"
             );
             t.unmock(executor.engine, "exec");
             resolve();
@@ -829,13 +828,13 @@ chatty.say("saying hello")
         `);
         const { executor } = ui.snip;
         t.mock(executor.engine, "exec", (data) => {
-            return { ok: true, stdout: data, stderr: "" };
+            return { ok: true, stdout: "ok", stderr: "", request: data };
         });
         ui.snip.addEventListener("result", (event) => {
             const result = event.detail;
             t.assert(
                 "chatty.py",
-                result.stdout.files["chatty.py"] == "def say(msg):\n    print(msg)"
+                result.request.files["chatty.py"] == "def say(msg):\n    print(msg)"
             );
             t.unmock(executor.engine, "exec");
             resolve();

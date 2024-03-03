@@ -19,23 +19,18 @@ template.innerHTML = `
 `;
 
 // output builders.
+// All prefer stdout to stderr.
 const builders = {
     // returns the result as a text node.
     [OutputMode.text]: (result) => {
-        let html = [];
-        if (result.stdout) {
-            html.push(result.stdout);
-        }
-        if (result.stderr) {
-            html.push(result.stderr);
-        }
-        return document.createTextNode(html.join("\n"));
+        const text = result.stdout || result.stderr;
+        return document.createTextNode(text);
     },
 
     // returns the result as an HTML table.
     // result.stdout should be a JSON array or a serialized JSON array
     [OutputMode.table]: (result) => {
-        if (result.stderr) {
+        if (!result.stdout) {
             return document.createTextNode(result.stderr);
         }
         const data = typeof result.stdout == "object" ? result.stdout : JSON.parse(result.stdout);
@@ -45,7 +40,7 @@ const builders = {
 
     // returns the result as an SVG element.
     [OutputMode.svg]: (result) => {
-        if (result.stderr) {
+        if (!result.stdout) {
             return document.createTextNode(result.stderr);
         }
         const doc = new DOMParser().parseFromString(result.stdout, "image/svg+xml");
@@ -57,7 +52,7 @@ const builders = {
 
     // returns the result as a document fragment.
     [OutputMode.html]: (result) => {
-        if (result.stderr) {
+        if (!result.stdout) {
             return document.createTextNode(result.stderr);
         }
         const doc = new DOMParser().parseFromString(result.stdout, "text/html");
@@ -71,7 +66,7 @@ const builders = {
 
     // treats the result as a DOM node unless it's an error.
     [OutputMode.dom]: (result) => {
-        if (result.stderr) {
+        if (!result.stdout) {
             return document.createTextNode(result.stderr);
         }
         return result.stdout;
@@ -79,7 +74,7 @@ const builders = {
 
     // hides the result unless it's an error.
     [OutputMode.hidden]: (result) => {
-        if (result.stderr) {
+        if (!result.stdout && result.stderr) {
             return document.createTextNode(result.stderr);
         }
         return null;
