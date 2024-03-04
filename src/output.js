@@ -8,6 +8,7 @@ const OutputMode = {
     table: "table",
     svg: "svg",
     html: "html",
+    iframe: "iframe",
     dom: "dom",
     hidden: "hidden",
 };
@@ -62,6 +63,33 @@ const builders = {
         const frag = document.createDocumentFragment();
         Array.from(doc.body.childNodes).forEach((child) => frag.appendChild(child));
         return frag;
+    },
+
+    // returns the result as an HTML document in an iframe.
+    [OutputMode.iframe]: (result) => {
+        if (!result.stdout) {
+            return document.createTextNode(result.stderr);
+        }
+        const doc = new DOMParser().parseFromString(result.stdout, "text/html");
+        if (doc.querySelector("parsererror")) {
+            return document.createTextNode(result.stdout);
+        }
+        const iframe = document.createElement("iframe");
+        iframe.width = "100%";
+        iframe.srcdoc = doc.documentElement.outerHTML;
+        iframe.onload = () => {
+            const body = iframe.contentDocument.body;
+            const html = iframe.contentDocument.documentElement;
+            const height = Math.max(
+                body.scrollHeight,
+                body.offsetHeight,
+                html.clientHeight,
+                html.scrollHeight,
+                html.offsetHeight
+            );
+            iframe.style.height = height + "px";
+        };
+        return iframe;
     },
 
     // treats the result as a DOM node unless it's an error.

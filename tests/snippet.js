@@ -49,6 +49,7 @@ async function runTests() {
     await testOutputModeTable();
     await testOutputModeSVG();
     await testOutputModeHTML();
+    await testOutputModeIframe();
     await testOutputModeDOM();
     await testOutputModeHidden();
 
@@ -654,6 +655,23 @@ async function testOutputModeHTML() {
         `);
         ui.snip.addEventListener("result", (event) => {
             t.assert("output", ui.output.out.innerHTML == "<em>hello</em>");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputModeIframe() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputModeIframe...");
+        const ui = createSnippet(`
+            <pre><code>console.log("&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;hello&lt;/body&gt;&lt;/html&gt;")</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript" output-mode="iframe">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output iframe", ui.output.out.innerHTML.startsWith("<iframe"));
+            t.assert("output body", ui.output.out.innerHTML.includes("<body>hello</body>"));
             resolve();
         });
         ui.toolbar.run.click();
