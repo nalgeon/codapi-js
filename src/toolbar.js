@@ -4,7 +4,7 @@ import { Action } from "./action.js";
 
 const template = document.createElement("template");
 template.innerHTML = `
-<button>Run</button>
+<button hidden>Run</button>
 <a href="#edit" hidden>Edit</a>
 <codapi-status></codapi-status>
 `;
@@ -85,6 +85,18 @@ class CodapiToolbar extends HTMLElement {
     showStatus(message) {
         this.run.removeAttribute("disabled");
         this.status.showMessage(message);
+    }
+
+    get runnable() {
+        return !this.run.hasAttribute("hidden");
+    }
+
+    set runnable(value) {
+        if (value) {
+            this.run.removeAttribute("hidden");
+        } else {
+            this.run.setAttribute("hidden", "");
+        }
     }
 
     get editable() {

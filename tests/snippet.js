@@ -15,6 +15,9 @@ async function runTests() {
     await testAttachSelector();
     await testAttachSelectorPrev();
 
+    await testRunnable();
+    await testNotRunnable();
+
     await testEditorOff();
     await testEditorBasic();
     await testEditorExternal();
@@ -268,6 +271,32 @@ async function testRunError() {
             resolve();
         });
         ui.toolbar.run.click();
+    });
+}
+
+async function testRunnable() {
+    return new Promise((resolve, reject) => {
+        t.log("testRunnable...");
+        const ui = createSnippet(`
+            <pre><code>print("hello")</code></pre>
+            <codapi-snippet sandbox="python"></codapi-snippet>
+        `);
+        t.assert("runnable", ui.toolbar.runnable);
+        t.assert("run button", !ui.toolbar.run.hasAttribute("hidden"));
+        resolve();
+    });
+}
+
+async function testNotRunnable() {
+    return new Promise((resolve, reject) => {
+        t.log("testNotRunnable...");
+        const ui = createSnippet(`
+            <pre><code>print("hello")</code></pre>
+            <codapi-snippet></codapi-snippet>
+        `);
+        t.assert("runnable", !ui.toolbar.runnable);
+        t.assert("run button", ui.toolbar.run.hasAttribute("hidden"));
+        resolve();
     });
 }
 

@@ -61,13 +61,15 @@ class CodapiSnippet extends HTMLElement {
     // init initializes the component state.
     init() {
         const filesStr = this.getAttribute("files");
-        this.executor = new Executor({
-            engine: this.getAttribute("engine"),
-            sandbox: this.getAttribute("sandbox"),
-            command: this.getAttribute("command"),
-            template: this.getAttribute("template"),
-            files: filesStr ? filesStr.split(" ") : null,
-        });
+        this.executor = this.hasAttribute("sandbox")
+            ? new Executor({
+                  engine: this.getAttribute("engine"),
+                  sandbox: this.getAttribute("sandbox"),
+                  command: this.getAttribute("command"),
+                  template: this.getAttribute("template"),
+                  files: filesStr ? filesStr.split(" ") : null,
+              })
+            : null;
         this.dependsOn = this.getAttribute("depends-on");
         this.state = State.unknown;
     }
@@ -80,6 +82,7 @@ class CodapiSnippet extends HTMLElement {
 
         this._toolbar = this.querySelector("codapi-toolbar");
         const actions = this.getAttribute("actions");
+        this._toolbar.runnable = this.executor != null;
         this._toolbar.addActions(actions ? actions.split(" ") : null);
 
         const status = this._toolbar.querySelector("codapi-status");
@@ -197,6 +200,9 @@ class CodapiSnippet extends HTMLElement {
 
     // execute runs the code.
     async execute(command = undefined) {
+        if (!this.executor) {
+            return;
+        }
         if (this.snippet.isEmpty) {
             this._output.showMessage("(empty)");
             return;
