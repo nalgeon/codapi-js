@@ -158,7 +158,7 @@ Output:
 └───────────┘
 ```
 
-`script` elements are ignored.
+The document loads like a regular web page: styles are applied, scripts are executed, and so on.
 
 ## Interactive DOM
 
