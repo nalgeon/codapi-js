@@ -37,14 +37,14 @@ Finally, add references to the Codapi script and styling in the `index.html` fil
 <head>
     <!-- ... -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css" />
-    <link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.17.0/dist/snippet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@antonz/codapi@0.18.0/dist/snippet.css" />
 </head>
 
 <body>
     <!-- ... -->
     <!-- Docsify v4 -->
     <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-    <script defer src="https://unpkg.com/@antonz/codapi@0.17.0/dist/snippet.js"></script>
+    <script defer src="https://unpkg.com/@antonz/codapi@0.18.0/dist/snippet.js"></script>
 </body>
 ```
 

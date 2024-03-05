@@ -6,6 +6,7 @@ The widget supports different output modes:
 [JSON table](#json-table) •
 [SVG images](#svg-images) •
 [HTML fragments](#html-fragments) •
+[Inline frame](#inline-frame) •
 [Interactive DOM](#interactive-dom)
 
 ## Plain text
@@ -127,6 +128,37 @@ Output:
 > I am _so_ **excited**!
 
 You can use any HTML markup except `script`.
+
+## Inline frame
+
+To display a full HTML document in an `iframe`, set the `output-mode` attribute to `iframe` and print a valid HTML document string from your code snippet.
+
+Widget:
+
+```html
+<codapi-snippet sandbox="python" output-mode="iframe">
+</codapi-snippet>
+```
+
+Code snippet:
+
+```python
+html = """<html>
+<head></head>
+<body>Hi there!</body>
+</html>"""
+print(html)
+```
+
+Output:
+
+```
+┌───────────┐
+│ Hi there! │
+└───────────┘
+```
+
+`script` elements are ignored.
 
 ## Interactive DOM
 
