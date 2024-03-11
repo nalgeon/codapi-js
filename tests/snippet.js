@@ -57,6 +57,7 @@ async function runTests() {
     await testOutputModeHidden();
 
     await testTemplate();
+    await testTemplateChange();
 
     await testFilesSnippet();
     await testFilesScript();
@@ -759,6 +760,26 @@ function say(msg) {
         ui.snip.addEventListener("result", (event) => {
             const result = event.detail;
             t.assert("result.stdout", result.stdout.trim() == "saying hello");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testTemplateChange() {
+    return new Promise((resolve, reject) => {
+        t.log("testTemplateChange...");
+        const ui = createSnippet(`
+<script id="template-1" type="text/plain">console.log("first")</script>
+<script id="template-2" type="text/plain">console.log("second")</script>
+<pre><code>say("saying hello")</code></pre>
+<codapi-snippet engine="browser" sandbox="javascript" template="#template-1">
+</codapi-snippet>
+        `);
+        ui.snip.setAttribute("template", "#template-2");
+        ui.snip.addEventListener("result", (event) => {
+            const result = event.detail;
+            t.assert("result.stdout", result.stdout.trim() == "second");
             resolve();
         });
         ui.toolbar.run.click();

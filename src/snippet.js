@@ -28,6 +28,8 @@ template.innerHTML = `
 
 // CodapiSnippet is an interactive code snippet with associated commands.
 class CodapiSnippet extends HTMLElement {
+    static observedAttributes = ["sandbox", "engine", "command", "template", "files"];
+
     constructor() {
         super();
 
@@ -239,6 +241,25 @@ class CodapiSnippet extends HTMLElement {
             this.dispatchEvent(new CustomEvent("error", { detail: exc }));
         } finally {
             this._output.fadeIn();
+        }
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        switch (name) {
+            case "engine":
+            case "sandbox":
+            case "command":
+            case "template":
+            case "files":
+                const filesStr = this.getAttribute("files");
+                this.executor = new Executor({
+                    engine: this.getAttribute("engine"),
+                    sandbox: this.getAttribute("sandbox"),
+                    command: this.getAttribute("command"),
+                    template: this.getAttribute("template"),
+                    files: filesStr ? filesStr.split(" ") : null,
+                });
+                break;
         }
     }
 
