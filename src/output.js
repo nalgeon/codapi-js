@@ -13,6 +13,9 @@ const OutputMode = {
     hidden: "hidden",
 };
 
+// placeholder for the empty output value
+const PLACEHOLDER = "ok";
+
 const template = document.createElement("template");
 template.innerHTML = `
 <a href="#close">✕</a>
@@ -24,7 +27,7 @@ template.innerHTML = `
 const builders = {
     // returns the result as a text node.
     [OutputMode.text]: (result) => {
-        const text = result.stdout || result.stderr;
+        const text = result.stdout || result.stderr || PLACEHOLDER;
         return document.createTextNode(text);
     },
 

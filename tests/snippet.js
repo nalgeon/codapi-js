@@ -55,6 +55,7 @@ async function runTests() {
     await testOutputModeIframe();
     await testOutputModeDOM();
     await testOutputModeHidden();
+    await testOutputPlaceholder();
 
     await testTemplate();
     await testTemplateChange();
@@ -737,6 +738,22 @@ async function testOutputModeHidden() {
         ui.snip.addEventListener("result", (event) => {
             t.assert("output empty", ui.output.out.innerHTML == "");
             t.assert("output hidden", ui.output.hasAttribute("hidden"));
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputPlaceholder() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputPlaceholder...");
+        const ui = createSnippet(`
+            <pre><code>const a = 42;</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript" output-mode="text">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output", ui.output.out.innerHTML == "ok");
             resolve();
         });
         ui.toolbar.run.click();
