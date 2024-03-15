@@ -1,6 +1,7 @@
 // An output of an interactive code snippet.
 
 import json from "./json.js";
+import text from "./text.js";
 
 // Output modes.
 const OutputMode = {
@@ -26,9 +27,12 @@ template.innerHTML = `
 // All prefer stdout to stderr.
 const builders = {
     // returns the result as a text node.
-    [OutputMode.text]: (result) => {
-        const text = result.stdout || result.stderr || PLACEHOLDER;
-        return document.createTextNode(text);
+    [OutputMode.text]: (result, shouldTail) => {
+        const value = result.stdout || result.stderr || PLACEHOLDER;
+        if (shouldTail) {
+            return document.createTextNode(text.tail(value));
+        }
+        return document.createTextNode(value);
     },
 
     // returns the result as an HTML table.
@@ -146,7 +150,7 @@ class CodapiOutput extends HTMLElement {
 
     // showResult shows the results of the code execution.
     showResult(result) {
-        const node = builders[this.mode](result);
+        const node = builders[this.mode](result, this.tail);
         this.output.innerHTML = "";
         if (!node) {
             this.hide();
@@ -189,6 +193,18 @@ class CodapiOutput extends HTMLElement {
             value = OutputMode.text;
         }
         this.setAttribute("mode", value);
+    }
+
+    // display only the last part of the output.
+    get tail() {
+        return this.hasAttribute("tail");
+    }
+    set tail(value) {
+        if (value) {
+            this.setAttribute("tail", "");
+        } else {
+            this.removeAttribute("tail");
+        }
     }
 }
 

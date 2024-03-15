@@ -55,7 +55,10 @@ async function runTests() {
     await testOutputModeIframe();
     await testOutputModeDOM();
     await testOutputModeHidden();
+
     await testOutputPlaceholder();
+    await testOutputNoTail();
+    await testOutputTail();
 
     await testTemplate();
     await testTemplateChange();
@@ -754,6 +757,42 @@ async function testOutputPlaceholder() {
         `);
         ui.snip.addEventListener("result", (event) => {
             t.assert("output", ui.output.out.innerHTML == "ok");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputNoTail() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputNoTail...");
+        const ui = createSnippet(`
+            <pre><code>console.log("hello");
+console.log("---");
+console.log("world");</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript" output-mode="text">
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output", ui.output.out.innerHTML == "hello\n---\nworld");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputTail() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputTail...");
+        const ui = createSnippet(`
+            <pre><code>console.log("hello");
+console.log("---");
+console.log("world");</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript" output-mode="text" output-tail>
+            </codapi-snippet>
+        `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output", ui.output.out.innerHTML == "world");
             resolve();
         });
         ui.toolbar.run.click();

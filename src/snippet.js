@@ -100,6 +100,7 @@ class CodapiSnippet extends HTMLElement {
 
         this._output = this.querySelector("codapi-output");
         this._output.mode = this.getAttribute("output-mode");
+        this._output.tail = this.hasAttribute("output-tail");
         if (this.hasAttribute("output")) {
             this._fallback = this.extractFallback(this.getAttribute("output"));
         }
