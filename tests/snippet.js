@@ -57,8 +57,9 @@ async function runTests() {
     await testOutputModeHidden();
 
     await testOutputPlaceholder();
-    await testOutputNoTail();
-    await testOutputTail();
+    await testOutputTailOff();
+    await testOutputTailOn();
+    await testOutputTailAuto();
 
     await testTemplate();
     await testTemplateChange();
@@ -763,9 +764,9 @@ async function testOutputPlaceholder() {
     });
 }
 
-async function testOutputNoTail() {
+async function testOutputTailOff() {
     return new Promise((resolve, reject) => {
-        t.log("testOutputNoTail...");
+        t.log("testOutputTailOff...");
         const ui = createSnippet(`
             <pre><code>console.log("hello");
 console.log("---");
@@ -781,9 +782,9 @@ console.log("world");</code></pre>
     });
 }
 
-async function testOutputTail() {
+async function testOutputTailOn() {
     return new Promise((resolve, reject) => {
-        t.log("testOutputTail...");
+        t.log("testOutputTailOn...");
         const ui = createSnippet(`
             <pre><code>console.log("hello");
 console.log("---");
@@ -791,6 +792,26 @@ console.log("world");</code></pre>
             <codapi-snippet engine="browser" sandbox="javascript" output-mode="text" output-tail>
             </codapi-snippet>
         `);
+        ui.snip.addEventListener("result", (event) => {
+            t.assert("output", ui.output.out.innerHTML == "world");
+            resolve();
+        });
+        ui.toolbar.run.click();
+    });
+}
+
+async function testOutputTailAuto() {
+    return new Promise((resolve, reject) => {
+        t.log("testOutputTailAuto...");
+        const html = `
+            <pre><code>console.log("hello")</code></pre>
+            <codapi-snippet id="step-1" engine="browser" sandbox="javascript">
+            </codapi-snippet>
+            <pre><code>console.log("world")</code></pre>
+            <codapi-snippet engine="browser" sandbox="javascript" depends-on="step-1" output-tail>
+            </codapi-snippet>
+        `;
+        const ui = createSnippet(html);
         ui.snip.addEventListener("result", (event) => {
             t.assert("output", ui.output.out.innerHTML == "world");
             resolve();

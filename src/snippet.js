@@ -6,6 +6,7 @@ import "./output.js";
 import { EditorMode, CodeElement } from "./editor.js";
 import { Executor } from "./executor.js";
 import text from "./text.js";
+import codegen from "./codegen.js";
 
 // UI messages.
 const messages = {
@@ -269,6 +270,14 @@ class CodapiSnippet extends HTMLElement {
         this._toolbar.showStatus(message);
     }
 
+    // what syntax is used.
+    get syntax() {
+        return this.getAttribute("syntax") || this.getAttribute("sandbox");
+    }
+    set syntax(value) {
+        this.setAttribute("syntax", value);
+    }
+
     // selector is the code element css selector.
     get selector() {
         return this.getAttribute("selector");
@@ -308,12 +317,14 @@ class CodapiSnippet extends HTMLElement {
 function gatherCode(curSnip) {
     let code = curSnip.code;
     let ids = curSnip.dependsOn ? curSnip.dependsOn.split(" ") : [];
+    // print separators between snippets to tail output later
+    const sep = curSnip.hasAttribute("output-tail") ? codegen.hr(curSnip.syntax) : "";
     for (const id of ids) {
         const snip = document.getElementById(id);
         if (!snip) {
             throw new Error(`#${id} dependency not found`);
         }
-        code = snip.code + "\n" + code;
+        code = snip.code + `\n${sep}\n` + code;
         if (snip.dependsOn) {
             ids.push(...snip.dependsOn.split(" ").filter((i) => !ids.includes(i)));
         }

@@ -1,5 +1,6 @@
-// tail separator
-const TAIL_SEPARATOR = "---";
+// Text handling.
+
+const HORIZONTAL_RULE = "---";
 
 // cut slices s around the first instance of sep,
 // returning the text before and after sep.
@@ -15,8 +16,17 @@ function cut(s, sep) {
 // tail returns the last part of s after the separator line.
 // If s does not contain a separator, returns s unchanged.
 function tail(s) {
-    const index = s.lastIndexOf(`\n${TAIL_SEPARATOR}`);
-    return index === -1 ? s : s.slice(index + 5);
+    if (s.endsWith(HORIZONTAL_RULE)) {
+        return "";
+    }
+    const index = s.lastIndexOf(`\n${HORIZONTAL_RULE}\n`);
+    if (index !== -1) {
+        return s.slice(index + HORIZONTAL_RULE.length + 2);
+    }
+    if (s.startsWith(HORIZONTAL_RULE)) {
+        return s.slice(HORIZONTAL_RULE.length + 1);
+    }
+    return s;
 }
 
-export default { cut, tail };
+export default { cut, tail, HORIZONTAL_RULE };

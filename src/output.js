@@ -28,11 +28,9 @@ template.innerHTML = `
 const builders = {
     // returns the result as a text node.
     [OutputMode.text]: (result, shouldTail) => {
-        const value = result.stdout || result.stderr || PLACEHOLDER;
-        if (shouldTail) {
-            return document.createTextNode(text.tail(value));
-        }
-        return document.createTextNode(value);
+        const value = result.stdout || result.stderr;
+        const output = shouldTail ? text.tail(value) : value;
+        return document.createTextNode(output || PLACEHOLDER);
     },
 
     // returns the result as an HTML table.
