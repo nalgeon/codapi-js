@@ -42,7 +42,7 @@ async function execCode(code) {
 function patchConsole(messages) {
     const consoleProxy = new Proxy(console, {
         get(target, prop) {
-            if (prop === "log" || prop === "error" || prop === "warn") {
+            if (prop === "log" || prop === "error" || prop === "warn" || prop === "info" || prop === "debug") {
                 return (...args) => {
                     const message = args.map((obj) => stringify(obj)).join(" ");
                     messages.push(message);
