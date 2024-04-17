@@ -32,7 +32,7 @@ npc.greet("Alice")
 
 Now `codapi-snippet` will send `npc.py` to the server along with the main file.
 
-To pass mutiple files, separate them with space:
+To pass multiple files, separate them with space:
 
 ```html
 <codapi-snippet sandbox="python" files="file1.py file2.py"></codapi-snippet>
