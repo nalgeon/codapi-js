@@ -70,6 +70,8 @@ async function runTests() {
     await testFilesTargetPath();
 
     await testDependsOn();
+    await testDependsOrder1();
+    await testDependsOrder2();
 
     t.summary();
     return t.errorCount;
@@ -1010,6 +1012,67 @@ async function testDependsOn() {
             t.assert("result.stderr", result.stderr == "");
             t.assert("status done", ui.status.innerHTML.includes("Done"));
             t.assert("output", ui.output.out.innerText.trim() == "step-1\nstep-2\nstep-3");
+            resolve();
+        });
+        ui.toolbar.run.click();
+        t.assert("status running", ui.status.innerHTML.includes("Running"));
+    });
+}
+
+async function testDependsOrder1() {
+    return new Promise((resolve, reject) => {
+        t.log("testDependsOrder1...");
+        const html = `
+            <pre><code>console.log("step-1")</code></pre>
+            <codapi-snippet id="step-1" engine="browser" sandbox="javascript">
+            </codapi-snippet>
+            <pre><code>console.log("step-2")</code></pre>
+            <codapi-snippet id="step-2" engine="browser" sandbox="javascript">
+            </codapi-snippet>
+            <pre><code>console.log("step-3")</code></pre>
+            <codapi-snippet id="step-3" engine="browser" sandbox="javascript" depends-on="step-1 step-2">
+            </codapi-snippet>
+        `;
+        const ui = createSnippet(html);
+        ui.snip.addEventListener("result", (event) => {
+            const result = event.detail;
+            t.assert("result.ok", result.ok);
+            t.assert("result.stdout", result.stdout.trim() == "step-1\nstep-2\nstep-3");
+            t.assert("result.stderr", result.stderr == "");
+            t.assert("status done", ui.status.innerHTML.includes("Done"));
+            t.assert("output", ui.output.out.innerText.trim() == "step-1\nstep-2\nstep-3");
+            resolve();
+        });
+        ui.toolbar.run.click();
+        t.assert("status running", ui.status.innerHTML.includes("Running"));
+    });
+}
+
+async function testDependsOrder2() {
+    return new Promise((resolve, reject) => {
+        t.log("testDependsOrder2...");
+        const html = `
+            <pre><code>console.log("step-1")</code></pre>
+            <codapi-snippet id="step-1" engine="browser" sandbox="javascript">
+            </codapi-snippet>
+            <pre><code>console.log("step-2")</code></pre>
+            <codapi-snippet id="step-2" engine="browser" sandbox="javascript" depends-on="step-1">
+            </codapi-snippet>
+            <pre><code>console.log("step-3")</code></pre>
+            <codapi-snippet id="step-3" engine="browser" sandbox="javascript" depends-on="step-1">
+            </codapi-snippet>
+            <pre><code>console.log("step-4")</code></pre>
+            <codapi-snippet id="step-4" engine="browser" sandbox="javascript" depends-on="step-2 step-3">
+            </codapi-snippet>
+        `;
+        const ui = createSnippet(html);
+        ui.snip.addEventListener("result", (event) => {
+            const result = event.detail;
+            t.assert("result.ok", result.ok);
+            t.assert("result.stdout", result.stdout.trim() == "step-1\nstep-2\nstep-3\nstep-4");
+            t.assert("result.stderr", result.stderr == "");
+            t.assert("status done", ui.status.innerHTML.includes("Done"));
+            t.assert("output", ui.output.out.innerText.trim() == "step-1\nstep-2\nstep-3\nstep-4");
             resolve();
         });
         ui.toolbar.run.click();

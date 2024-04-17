@@ -319,14 +319,17 @@ function gatherCode(curSnip) {
     let ids = curSnip.dependsOn ? curSnip.dependsOn.split(" ") : [];
     // print separators between snippets to tail output later
     const sep = curSnip.hasAttribute("output-tail") ? codegen.hr(curSnip.syntax) : "";
-    for (const id of ids) {
+    // first dependency should be the last one to be prepended
+    for (const id of ids.reverse()) {
         const snip = document.getElementById(id);
         if (!snip) {
             throw new Error(`#${id} dependency not found`);
         }
         code = snip.code + `\n${sep}\n` + code;
         if (snip.dependsOn) {
-            ids.push(...snip.dependsOn.split(" ").filter((i) => !ids.includes(i)));
+            const moreIDs = snip.dependsOn.split(" ").filter((i) => !ids.includes(i));
+            // first dependency should be the last one to be prepended
+            ids.push(...moreIDs.reverse());
         }
     }
     return code;
