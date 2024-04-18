@@ -55,6 +55,11 @@ class CodeElement extends EventTarget {
     initEditor(event) {
         const code = event.target;
         if (code.innerHTML.includes("</span>")) {
+            // Docusaurus uses <br> for new lines inside code blocks,
+            // so we need to replace it with \n.
+            if (code.innerHTML.includes("<br>")) {
+                code.innerHTML = code.innerHTML.replaceAll("<br>", "\n");
+            }
             code.textContent = code.textContent;
         }
         code.removeEventListener("focus", this.onFocus);
