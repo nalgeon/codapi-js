@@ -315,24 +315,32 @@ class CodapiSnippet extends HTMLElement {
 // and builds the complete code from the first snippet
 // to the last (which is the current one).
 function gatherCode(curSnip) {
-    let code = curSnip.code;
-    let ids = curSnip.dependsOn ? curSnip.dependsOn.split(" ") : [];
-    // print separators between snippets to tail output later
-    const sep = curSnip.hasAttribute("output-tail") ? codegen.hr(curSnip.syntax) : "";
-    // first dependency should be the last one to be prepended
-    for (const id of ids.reverse()) {
-        const snip = document.getElementById(id);
+    const visited = new Set();
+    const result = [];
+
+    const recurse = (snip, id) => {
         if (!snip) {
             throw new Error(`#${id} dependency not found`);
         }
-        code = snip.code + `\n${sep}\n` + code;
-        if (snip.dependsOn) {
-            const moreIDs = snip.dependsOn.split(" ").filter((i) => !ids.includes(i));
-            // first dependency should be the last one to be prepended
-            ids.push(...moreIDs.reverse());
+
+        if (visited.has(id)) {
+            return;
         }
-    }
-    return code;
+        visited.add(id);
+
+        if (snip.dependsOn) {
+            snip.dependsOn.split(" ").forEach((depID) => {
+                recurse(document.getElementById(depID), depID);
+            });
+        }
+
+        result.push(snip.code);
+    };
+
+    recurse(curSnip, curSnip.id);
+    // print separators between snippets to tail output later
+    const sep = curSnip.hasAttribute("output-tail") ? codegen.hr(curSnip.syntax) : "";
+    return sep ? result.join(`\n${sep}\n`) : result.join("\n");
 }
 
 // delay executes a function after a timeout,
