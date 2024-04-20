@@ -90,8 +90,7 @@ class CodeElement extends EventTarget {
         if (!event.ctrlKey && !event.metaKey) {
             return;
         }
-        // 10 and 13 are Enter codes
-        if (event.keyCode != 10 && event.keyCode != 13) {
+        if (event.key !== "Enter" && event.key !== "NumpadEnter") {
             return;
         }
         event.preventDefault();
