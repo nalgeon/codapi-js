@@ -91,7 +91,7 @@ class CodeElement extends EventTarget {
             return;
         }
         if (event.key !== "Enter" && event.key !== "NumpadEnter") {
-          return;
+            return;
         }
         event.preventDefault();
         this.executeFunc();
