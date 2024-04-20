@@ -48,6 +48,7 @@ class CodeElement extends EventTarget {
         // init editor on first focus
         this.onFocus = this.initEditor.bind(this);
         this.el.addEventListener("focus", this.onFocus);
+        setTimeout(() => this.fixFormatting(), 0);
     }
 
     // initEditor removes prepares the code snippet
@@ -55,11 +56,6 @@ class CodeElement extends EventTarget {
     initEditor(event) {
         const code = event.target;
         if (code.innerHTML.includes("</span>")) {
-            // Docusaurus uses <br> for new lines inside code blocks,
-            // so we need to replace it with \n.
-            if (code.innerHTML.includes("<br>")) {
-                code.innerHTML = code.innerHTML.replaceAll("<br>", "\n");
-            }
             code.textContent = code.textContent;
         }
         code.removeEventListener("focus", this.onFocus);
@@ -106,6 +102,17 @@ class CodeElement extends EventTarget {
         document.execCommand("insertText", false, text);
     }
 
+    // fixFormatting removes invalid formatting from the code,
+    // while preserving the syntax highlighting.
+    fixFormatting() {
+        this.el.innerHTML = this.el.innerHTML
+            // Docusaurus uses <br> for new lines inside code blocks,
+            // so we need to replace it with \n
+            .replaceAll("<br>", "\n")
+            // convert non-breaking spaces to normal ones
+            .replace(/[\u00A0]/g, " ");
+    }
+
     // focusEnd sets the cursor to the end of the element's content.
     focusEnd() {
         this.el.focus();
@@ -121,8 +128,7 @@ class CodeElement extends EventTarget {
 
     // value is the plain text code value.
     get value() {
-        // trim and convert non-breaking spaces to normal ones
-        return this.el.textContent.trim().replace(/[\u00A0]/g, " ");
+        return this.el.textContent.trim();
     }
     set value(val) {
         this.el.textContent = val;
