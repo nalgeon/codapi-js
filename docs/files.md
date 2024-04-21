@@ -58,23 +58,7 @@ npc.greet("Alice")
 
 The use of `id` and `#` is mandatory; you can't select files based on CSS classes or other attributes.
 
-You can use `pre` instead of `script`:
-
-```html
-<pre id="npc.py"><code>
-def greet(name):
-    print(f"Hello, {name}")
-</code></pre>
-
-<pre>
-import npc
-npc.greet("Alice")
-</pre>
-
-<codapi-snippet sandbox="python" files="#npc.py"></codapi-snippet>
-```
-
-Or even another `codapi-snippet`:
+You can also use another `codapi-snippet` instead of a script:
 
 ```html
 <pre>
