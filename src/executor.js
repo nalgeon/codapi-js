@@ -11,7 +11,7 @@ const defaultCommand = "run";
 // Executor runs the code and shows the results.
 class Executor {
     constructor({ engine, sandbox, command, template, files }) {
-        const [sandboxName, version] = text.cut(sandbox, ":");
+        const [sandboxName, version] = text.cut(sandbox || "", ":");
         this.engineName = engine || defaultEngine;
         this.sandbox = sandboxName;
         this.version = version;
