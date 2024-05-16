@@ -16,6 +16,7 @@ class CodeElement extends EventTarget {
         this.el = el;
         this.mode = mode;
         this.executeFunc = executeFunc;
+        this.fixFormatting();
         this.listen();
     }
 
@@ -48,7 +49,6 @@ class CodeElement extends EventTarget {
         // init editor on first focus
         this.onFocus = this.initEditor.bind(this);
         this.el.addEventListener("focus", this.onFocus);
-        setTimeout(() => this.fixFormatting(), 0);
     }
 
     // initEditor removes prepares the code snippet
@@ -105,12 +105,14 @@ class CodeElement extends EventTarget {
     // fixFormatting removes invalid formatting from the code,
     // while preserving the syntax highlighting.
     fixFormatting() {
-        this.el.innerHTML = this.el.innerHTML
-            // Docusaurus uses <br> for new lines inside code blocks,
-            // so we need to replace it with \n
-            .replaceAll("<br>", "\n")
-            // convert non-breaking spaces to normal ones
-            .replace(/[\u00A0]/g, " ");
+        setTimeout(() => {
+            this.el.innerHTML = this.el.innerHTML
+                // Docusaurus uses <br> for new lines inside code blocks,
+                // so we need to replace it with \n
+                .replaceAll("<br>", "\n")
+                // convert non-breaking spaces to normal ones
+                .replace(/[\u00A0]/g, " ");
+        }, 0);
     }
 
     // focusEnd sets the cursor to the end of the element's content.
