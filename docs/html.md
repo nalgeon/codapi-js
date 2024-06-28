@@ -18,19 +18,19 @@ Here is how to embed interactive code snippets into your HTML or Markdown pages:
 Let's start with a simple use case. Suppose you have a static code snippet in Python:
 
 ```html
-<pre>
+<pre><code>
 msg = "Hello, World!"
 print(msg)
-</pre>
+</code></pre>
 ```
 
 To make it interactive, add a `codapi-snippet` element right after the `pre` element:
 
 ```html
-<pre>
+<pre><code>
 msg = "Hello, World!"
 print(msg)
-</pre>
+</code></pre>
 
 <codapi-snippet sandbox="python" editor="basic"></codapi-snippet>
 ```

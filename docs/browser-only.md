@@ -17,10 +17,10 @@ Note that WASI-based playgrounds (`engine` = `wasi` in the examples below) requi
 Executes the code using the [AsyncFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction).
 
 ```html
-<pre>
+<pre><code>
 const msg = "Hello, World!"
 console.log(msg)
-</pre>
+</code></pre>
 
 <codapi-snippet engine="browser" sandbox="javascript" editor="basic"></codapi-snippet>
 ```
@@ -32,14 +32,14 @@ console.log(msg)
 Executes the code using the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 
 ```html
-<pre>
+<pre><code>
 POST https://httpbingo.org/dump/request
 content-type: application/json
 
 {
     "message": "hello"
 }
-</pre>
+</code></pre>
 
 <codapi-snippet engine="browser" sandbox="fetch" editor="basic"></codapi-snippet>
 ```
@@ -51,10 +51,10 @@ content-type: application/json
 Executes the code using the [Lua WASI runtime](https://github.com/nalgeon/lua-wasi) (330 KB).
 
 ```html
-<pre>
+<pre><code>
 local msg = "Hello, World!"
 print(msg)
-</pre>
+</code></pre>
 
 <codapi-snippet engine="wasi" sandbox="lua" editor="basic"></codapi-snippet>
 ```
@@ -66,12 +66,12 @@ print(msg)
 Executes the code using the [PHP WASI runtime](https://github.com/nalgeon/php-wasi) (13.2 MB).
 
 ```html
-<pre>
+<pre><code>
 &lt;?php
 $msg = "Hello, World!";
 echo $msg;
 ?&gt;
-</pre>
+</code></pre>
 
 <codapi-snippet engine="wasi" sandbox="php" editor="basic"></codapi-snippet>
 ```
@@ -83,11 +83,11 @@ echo $msg;
 Executes the code using the [PGlite runtime](https://github.com/electric-sql/pglite) (12 MB).
 
 ```html
-<pre>
+<pre><code>
 create table data(message text);
 insert into data values ('Hello, World!');
 select * from data;
-</pre>
+</code></pre>
 
 <codapi-snippet engine="pglite" sandbox="postgres" editor="basic" output-mode="table">
 </codapi-snippet>
@@ -111,10 +111,10 @@ Note that this playground requires additional scripts besides the usual `snippet
 Executes the code using the [Python WASI runtime](https://github.com/nalgeon/python-wasi) (26.3 MB).
 
 ```html
-<pre>
+<pre><code>
 msg = "Hello, World!"
 print(msg)
-</pre>
+</code></pre>
 
 <codapi-snippet engine="wasi" sandbox="python" editor="basic"></codapi-snippet>
 ```
@@ -126,10 +126,10 @@ print(msg)
 Executes the code using the [Ruby WASI runtime](https://github.com/nalgeon/ruby-wasi) (24.5 MB).
 
 ```html
-<pre>
+<pre><code>
 msg = "Hello, World!"
 puts msg
-</pre>
+</code></pre>
 
 <codapi-snippet engine="wasi" sandbox="ruby" editor="basic"></codapi-snippet>
 ```
@@ -141,9 +141,9 @@ puts msg
 Executes the code using the [SQLite WASI runtime](https://github.com/nalgeon/sqlite-wasi) (2.1 MB).
 
 ```html
-<pre>
+<pre><code>
 select "Hello, World!" as message;
-</pre>
+</code></pre>
 
 <codapi-snippet engine="wasi" sandbox="sqlite" editor="basic"></codapi-snippet>
 ```

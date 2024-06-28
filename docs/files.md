@@ -20,10 +20,10 @@ def greet(name):
 2. Create a snippet with the actual code:
 
 ```html
-<pre>
+<pre><code>
 import npc
 npc.greet("Alice")
-</pre>
+</code></pre>
 
 <codapi-snippet sandbox="python" files="npc.py"></codapi-snippet>
 ```
@@ -48,10 +48,10 @@ def greet(name):
     print(f"Hello, {name}")
 </script>
 
-<pre>
+<pre><code>
 import npc
 npc.greet("Alice")
-</pre>
+</code></pre>
 
 <codapi-snippet sandbox="python" files="#npc.py"></codapi-snippet>
 ```
@@ -61,17 +61,17 @@ The use of `id` and `#` is mandatory; you can't select files based on CSS classe
 You can also use another `codapi-snippet` instead of a script:
 
 ```html
-<pre>
+<pre><code>
 def greet(name):
     print(f"Hello, {name}")
-</pre>
+</code></pre>
 
 <codapi-snippet id="npc.py" sandbox="python"></codapi-snippet>
 
-<pre>
+<pre><code>
 import npc
 npc.greet("Alice")
-</pre>
+</code></pre>
 
 <codapi-snippet sandbox="python" files="#npc.py"></codapi-snippet>
 ```
@@ -81,10 +81,10 @@ npc.greet("Alice")
 You can set a different name for a file using `:`:
 
 ```html
-<pre>
+<pre><code>
 import greeter
 greeter.greet("Alice")
-</pre>
+</code></pre>
 
 <codapi-snippet sandbox="python" files="npc.py:greeter.py"></codapi-snippet>
 ```

@@ -34,10 +34,10 @@ func main() {
 2. Create a snippet with the actual code:
 
 ```html
-<pre>
+<pre><code>
 msg = "Hello, World!"
 fmt.Println(msg)
-</pre>
+</code></pre>
 
 <codapi-snippet sandbox="go" editor="basic" template="main.go">
 </codapi-snippet>
@@ -57,9 +57,9 @@ def greet(name):
 ##CODE##
 </script>
 
-<pre>
+<pre><code>
 greet("World")
-</pre>
+</code></pre>
 
 <codapi-snippet sandbox="python" template="#main.py"></codapi-snippet>
 ```
