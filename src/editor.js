@@ -38,6 +38,8 @@ class CodeElement extends EventTarget {
         // otherwise, enable basic editing features
         // make the element editable
         this.el.contentEditable = "true";
+        // disable spell checking and auto-correction
+        this.el.spellcheck = false;
         // indent on Tab
         this.el.addEventListener("keydown", this.handleIndent.bind(this));
         // hide output on Esc
