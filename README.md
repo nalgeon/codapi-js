@@ -105,12 +105,10 @@ Here is the widget structure:
 
 `codapi-snippet` is the top-level element. It contains the the toolbar (`codapi-toolbar`) and the code execution output (`codapi-output`). The toolbar contains a Run `button`, one or more action buttons (`a`) and a status bar (`codapi-status`).
 
-## Funding
+## Support
 
 Codapi is mostly a [one-man](https://antonz.org/) project, not backed by a VC fund or anything.
 
-If you find Codapi useful, please consider sponsoring it on GitHub. It really helps to move the project forward.
-
-♥ [Become a sponsor](https://github.com/sponsors/nalgeon) to support Codapi.
+If you find Codapi useful, please star it on GitHub and spread the word among your peers. It really helps to move the project forward.
 
 ★ [Subscribe](https://antonz.org/subscribe/) to stay on top of new features.
