@@ -35,7 +35,7 @@ You can add as many code links per article as you like.
 
 Suppose you are writing an article about ordering syntax in SQL. To keep the code snippets from getting too verbose, you'll probably want to show only the SELECT queries, not the CREATE TABLE and INSERTs that prepare the data.
 
-To accomplish this, you can show display the SELECTs in your article, while executing all the code behind the scenes.
+To accomplish this, you can show the SELECTs in your article, while executing all the code behind the scenes.
 
 First, add a static code snippet to your article as usual:
 
