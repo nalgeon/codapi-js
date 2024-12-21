@@ -101,7 +101,10 @@ class CodeElement extends EventTarget {
         // get text representation of clipboard
         const text = (event.originalEvent || event).clipboardData.getData("text/plain");
         // insert text manually
-        document.execCommand("insertText", false, text);
+        const selection = window.getSelection();
+        selection.deleteFromDocument();
+        selection.getRangeAt(0).insertNode(document.createTextNode(text));
+        selection.collapseToEnd();
     }
 
     // fixFormatting removes invalid formatting from the code,
