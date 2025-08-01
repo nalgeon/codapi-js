@@ -707,10 +707,16 @@ async function testOutputModeIframe() {
             <codapi-snippet engine="browser" sandbox="javascript" output-mode="iframe">
             </codapi-snippet>
         `);
-        ui.snip.addEventListener("result", (event) => {
-            t.assert("output iframe", ui.output.out.innerHTML.startsWith("<iframe"));
-            t.assert("output body", ui.output.out.innerHTML.includes("<body>hello</body>"));
-            resolve();
+        ui.snip.addEventListener("result", () => {
+            const iframe = ui.output.out.querySelector("iframe");
+            t.assert("output iframe", iframe !== null);
+            iframe.addEventListener("load", () => {
+                t.assert(
+                    "output body",
+                    iframe.contentDocument.documentElement.innerHTML.includes("hello")
+                );
+                resolve();
+            });
         });
         ui.toolbar.run.click();
     });
