@@ -19,10 +19,10 @@ Embed interactive code snippets directly into your product documentation, online
 
 Highlights:
 
--   Automatically converts static code examples into mini-playgrounds.
--   Lightweight and easy to integrate.
--   Sandboxes for any programming language, database, or software.
--   Open source. Uses the permissive Apache-2.0 license.
+- Automatically converts static code examples into mini-playgrounds.
+- Lightweight and easy to integrate.
+- Sandboxes for any programming language, database, or software.
+- Open source. Uses the permissive Apache-2.0 license.
 
 For an introduction to Codapi, see this post: [Interactive code examples for fun and profit](https://antonz.org/code-examples/).
 
@@ -50,12 +50,13 @@ Optional styles:
 
 See the guide that best fits your use case:
 
--   [HTML/Markdown](docs/html.md)
--   [Docusaurus](docs/docusaurus.md)
--   [Docsify](docs/docsify.md)
--   [WordPress](docs/wordpress.md)
--   [Notion](docs/notion.md)
--   [Dev.to/Medium/Substack/Newsletter](docs/code-links.md) (or other platforms that do not support JavaScript embeds)
+- [HTML/Markdown](docs/html.md)
+- [Docusaurus](docs/docusaurus.md)
+- [Docsify](docs/docsify.md)
+- [Sphinx](https://github.com/uthcode/sphinxcontrib-coderun)
+- [WordPress](docs/wordpress.md)
+- [Notion](docs/notion.md)
+- [Dev.to/Medium/Substack/Newsletter](docs/code-links.md) (or other platforms that do not support JavaScript embeds)
 
 You'll also need a working Codapi server, either cloud-based at [codapi.org](https://codapi.org/) or [self-hosted](https://github.com/nalgeon/codapi). Unless you are using an in-browser playground (see below).
 
@@ -63,11 +64,11 @@ You'll also need a working Codapi server, either cloud-based at [codapi.org](htt
 
 Codapi offers a number of features that go beyond simple code playgrounds:
 
--   [Output modes](docs/output-modes.md) for displaying images, HTML fragments and interactive DOM.
--   [Templates](docs/templates.md) for hiding parts of the code behind the scenes.
--   [Multi-file](docs/files.md) playgrounds.
--   [Custom actions](docs/custom-actions.md).
--   [Code cells](docs/code-cells.md) for a Jupyter notebook-like experience.
+- [Output modes](docs/output-modes.md) for displaying images, HTML fragments and interactive DOM.
+- [Templates](docs/templates.md) for hiding parts of the code behind the scenes.
+- [Multi-file](docs/files.md) playgrounds.
+- [Custom actions](docs/custom-actions.md).
+- [Code cells](docs/code-cells.md) for a Jupyter notebook-like experience.
 
 ## In-browser playgrounds
 
@@ -75,14 +76,14 @@ Most playgrounds (like Go or MongoDB) run code on the Codapi server.
 
 But there are some playgrounds that work completely in the browser, no Codapi server required:
 
--   [JavaScript](docs/browser-only.md#javascript)
--   [Fetch](docs/browser-only.md#fetch)
--   [Lua](docs/browser-only.md#lua)
--   [PHP](docs/browser-only.md#php)
--   [PostgreSQL](docs/browser-only.md#postgresql)
--   [Python](docs/browser-only.md#python)
--   [Ruby](docs/browser-only.md#ruby)
--   [SQLite](docs/browser-only.md#sqlite)
+- [JavaScript](docs/browser-only.md#javascript)
+- [Fetch](docs/browser-only.md#fetch)
+- [Lua](docs/browser-only.md#lua)
+- [PHP](docs/browser-only.md#php)
+- [PostgreSQL](docs/browser-only.md#postgresql)
+- [Python](docs/browser-only.md#python)
+- [Ruby](docs/browser-only.md#ruby)
+- [SQLite](docs/browser-only.md#sqlite)
 
 ## Styling
 
