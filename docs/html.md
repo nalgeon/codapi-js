@@ -6,6 +6,7 @@ Here is how to embed interactive code snippets into your HTML or Markdown pages:
 -   [Attaching to an element](#attaching-to-a-specific-element)
 -   [Syntax highlighting](#syntax-highlighting-and-rich-editing)
 -   [Output modes](#output-modes)
+-   [Fallback output](#fallback-output)
 -   [Templates](#templates)
 -   [Files](#files)
 -   [Custom actions](#custom-actions)
@@ -102,6 +103,26 @@ To use `codapi-snippet` with code editors like CodeMirror, do the following:
 <codapi-snippet sandbox="python" editor="external" selector="#editor">
 </codapi-snippet>
 ```
+
+## Fallback output
+
+You can define the default code output (e.g. what happens if the reader clicks _Run_ without changing the code). The widget will show this output if the Codapi server is down.
+
+The default output will also be displayed in the RSS feed, which can be useful for readers who consume content through an RSS reader without ever visiting the actual page.
+
+To use the fallback output, add an `output` attribute to the `codapi-snippet` and add an element with a default output after the snippet:
+
+```html
+<pre>msg = "hello world"
+print(msg)</pre>
+
+<codapi-snippet sandbox="python" editor="basic" output>
+</codapi-snippet>
+
+<pre>hello world</pre>
+```
+
+I strongly recommend always using the fallback output.
 
 ## Output modes
 
