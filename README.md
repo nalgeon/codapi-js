@@ -72,7 +72,7 @@ Codapi offers a number of features that go beyond simple code playgrounds:
 
 ## In-browser playgrounds
 
-Most playgrounds (like Go or MongoDB) run code on the Codapi server.
+Most playgrounds (like Go or PostgreSQL) run code on the Codapi server.
 
 There are also two playgrounds that work completely in the browser, no Codapi server required — [JavaScript](docs/browser-only.md#javascript) and [Fetch](docs/browser-only.md#fetch).
 
