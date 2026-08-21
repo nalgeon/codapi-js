@@ -6,7 +6,7 @@ const defaultUrl = "https://api.codapi.org/v1";
 const defaultErrMsg = "Something is wrong with Codapi.";
 
 const probeInterval = 30 * 1000; // 30 seconds
-const probeTimeout = 1000; // 1 second
+const probeTimeout = 3000; // 3 seconds
 
 const errors = {
     400: "Bad request. Something is wrong with the request, not sure what.",
